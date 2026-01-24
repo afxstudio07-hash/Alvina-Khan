@@ -1,0 +1,2067 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AFX Studio — All‑in‑One Creative & Digital Studio</title>
+  <meta name="description" content="AFX Studio — All-in-one creative & digital studio. Branding, Graphics, Web, Motion, Social Media, UI/UX. Professional portfolio, inquiry form, and contact." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+ <!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+  <style>
+    :root{
+      --bg0:#06132b;     /* dark */
+      --bg1:#071a3a;     /* deep navy */
+      --bg2:#0b2a67;     /* blue */
+      --accent:#f7c600;  /* yellow */
+      --accent2:#ffdd55;
+      --text:#f6fbff;
+      --muted: rgba(246,251,255,.72);
+      --glass: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.10);
+    }
+
+    html{ scroll-behavior:smooth; }
+    body{
+      font-family: "Space Grotesk", "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(247,198,0,.14), transparent 55%),
+                  radial-gradient(900px 600px at 85% 20%, rgba(95,208,255,.14), transparent 55%),
+                  radial-gradient(900px 600px at 70% 95%, rgba(247,198,0,.10), transparent 55%),
+                  linear-gradient(180deg, var(--bg0), var(--bg1) 55%, #050d1f);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    /* animated subtle grid */
+    .grid-overlay{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse at 50% 30%, rgba(0,0,0,.95), transparent 68%);
+      opacity:.18;
+      animation: gridFloat 10s ease-in-out infinite;
+    }
+    @keyframes gridFloat{
+      0%,100%{ transform: translateY(0); opacity:.16; }
+      50%{ transform: translateY(-10px); opacity:.22; }
+    }
+
+    /* noise layer */
+    .noise{
+      position: fixed;
+      inset: 0;
+      pointer-events:none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="180" height="180" filter="url(%23n)" opacity="0.22"/></svg>');
+      opacity:.06;
+      mix-blend-mode: overlay;
+    }
+
+    /* neon accent */
+    .accent-glow{
+      text-shadow:
+        0 0 22px rgba(247,198,0,.25),
+        0 0 55px rgba(247,198,0,.18);
+    }
+
+    /* glass */
+    .glass{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border: 1px solid var(--stroke);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* reveal animations */
+    .reveal{ opacity:0; transform: translateY(18px) scale(.98); filter: blur(6px); }
+    .reveal.is-in{ opacity:1; transform: translateY(0) scale(1); filter: blur(0); transition: all 900ms cubic-bezier(.2,.8,.2,1); }
+    .reveal.delay-1.is-in{ transition-delay: 110ms; }
+    .reveal.delay-2.is-in{ transition-delay: 220ms; }
+    .reveal.delay-3.is-in{ transition-delay: 330ms; }
+
+    /* 3D tilt base */
+    .tilt{
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .tilt .tilt-pop{ transform: translateZ(26px); }
+
+    /* animated gradient border */
+    .ring-anim{
+      position: relative;
+    }
+    .ring-anim:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius: 18px;
+      padding:1px;
+      background: conic-gradient(from 180deg, rgba(247,198,0,.0), rgba(247,198,0,.9), rgba(95,208,255,.65), rgba(247,198,0,.0));
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity:.55;
+      filter: blur(.2px);
+      animation: spin 5.8s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+
+    /* 3D cube */
+.cube-wrap {
+  perspective: 900px;
+}
+
+.cube {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  transform-style: preserve-3d;
+  animation: cubeSpin 14s linear infinite;
+}
+
+.cube .face {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  
+  /* Vibrant gradient background */
+  background: linear-gradient(135deg, #854c01, #ff0080);
+  
+  /* Border and shadow for 3D feel */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),   /* outer shadow */
+    inset 0 0 10px rgba(255, 255, 255, 0.1); /* subtle glow inside */
+  
+  /* Optional: animated shine */
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+.cube .face strong {
+  color: #fff;
+  text-shadow: 0 0 6px rgba(0,0,0,0.5);
+}
+
+/* Cube faces positioning */
+.cube .front  { transform: translateZ(80px); }
+.cube .back   { transform: rotateY(180deg) translateZ(80px); }
+.cube .right  { transform: rotateY(90deg) translateZ(80px); }
+.cube .left   { transform: rotateY(-90deg) translateZ(80px); }
+.cube .top    { transform: rotateX(90deg) translateZ(80px); }
+.cube .bottom { transform: rotateX(-90deg) translateZ(80px); }
+
+/* Cube spin animation */
+@keyframes cubeSpin {
+  0%   { transform: rotateX(0deg) rotateY(0deg); }
+  50%  { transform: rotateX(-360deg) rotateY(360deg); }
+  100% { transform: rotateX(14deg) rotateY(360deg); }
+}
+
+/* Gradient animation for shine effect */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+    /* Buttons */
+    .btn{
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+    .btn-primary{
+      color: #081429;
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      box-shadow: 0 14px 40px rgba(247,198,0,.22);
+    }
+    .btn-primary:hover{ box-shadow: 0 18px 52px rgba(247,198,0,.30); transform: translateY(-1px); }
+    .btn-ghost{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+    }
+    .btn-ghost:hover{ background: rgba(255,255,255,.09); transform: translateY(-1px); }
+
+    /* input */
+    .field{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+    .field:focus{
+      border-color: rgba(247,198,0,.65);
+      box-shadow: 0 0 0 4px rgba(247,198,0,.12);
+    }
+    .help{ color: rgba(246,251,255,.72); font-size: 12px; }
+
+    /* modal */
+    .modal-backdrop{ background: rgba(0,0,0,.55); backdrop-filter: blur(8px); }
+
+    /* toast */
+    .toast{
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events:none;
+      transition: transform .35s ease, opacity .35s ease;
+    }
+    .toast.show{ transform: translateY(0); opacity:1; }
+
+    /* canvas */
+    #bg{
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+    }
+
+    /* reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .grid-overlay, .cube{ animation:none !important; }
+      .reveal{ opacity:1; transform:none; filter:none; }
+    }
+    /* ===== 3D SCENE ===== */
+.tilt-wrap {
+  perspective: 1200px;
+}
+
+/* ===== CARD BASE ===== */
+.glass {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+/* ===== GLOW ON HOVER ===== */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    400px circle at var(--x) var(--y),
+    rgba(255,215,0,.25),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+
+.glass:hover::before {
+  opacity: 1;
+}
+
+.glass:hover {
+  box-shadow:
+    0 25px 60px rgba(0,0,0,.45),
+    0 0 30px rgba(255,215,0,.35);
+}
+
+/* ===== INNER DEPTH ===== */
+.glass > * {
+  transform: translateZ(30px);
+}
+  </style>
+</head>
+
+<body class="selection:bg-[rgba(247,198,0,.35)] selection:text-white">
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Top Bar / Nav -->
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mt-4 glass rounded-2xl ring-anim">
+        <div class="flex items-center justify-between px-4 py-3">
+          <a href="#home" class="group flex items-center gap-3">
+            <div class="h-10 w-10 rounded-xl bg-[rgba(247,198,0,.14)] border border-[rgba(247,198,0,.25)] grid place-items-center">
+              <span class="text-[15px] font-extrabold tracking-widest text-[var(--accent)]">AFX</span>
+            </div>
+            <div class="leading-tight">
+              <div class="text-white font-bold tracking-wide">AFX Studio</div>
+              <div class="text-xs text-[rgba(246,251,255,.72)]">All‑in‑One Creative • Digital • 3D</div>
+            </div>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-1 text-sm">
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#about">About</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#services">Services</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#work-showcase">Work</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#team">Designer</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#inquiry">Inquiry</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#contact">Contact</a>
+          </nav>
+
+          <div class="flex items-center gap-2">
+            <a href="#inquiry" class="hidden sm:inline-flex btn btn-primary">Get a Quote</a>
+            <button id="menuBtn" class="md:hidden btn btn-ghost" aria-label="Open menu">
+              <span class="font-semibold">Menu</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- mobile menu -->
+        <div id="mobileMenu" class="md:hidden hidden border-t border-white/10 px-4 pb-4">
+          <div class="grid gap-1 pt-3 text-sm">
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#afx-about-section">About</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#services">Services</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#work">Work</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#designer">Designer</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#inquiry">Inquiry</a>
+            <a class="navlink px-3 py-2 rounded-xl hover:bg-white/5" href="#contact">Contact</a>
+            <a href="#inquiry" class="mt-2 inline-flex justify-center btn btn-primary">Get a Quote</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="home" class="pt-28 md:pt-32">
+    <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7">
+          <div class="reveal is-in" data-reveal>
+            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-[rgba(246,251,255,.78)]">
+              <span class="h-2 w-2 rounded-full bg-[var(--accent)] shadow-[0_0_18px_rgba(247,198,0,.55)]"></span>
+              <span>AFX Studio — Branding • Graphics • Web • Motion • 3D</span>
+            </div>
+          </div>
+
+          <h1 class="mt-5 reveal delay-1" data-reveal>
+            <span class="block text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
+              Creativity that makes
+              <span class="accent-glow text-[var(--accent)]">Brands</span>
+              Immortal.
+            </span>
+          </h1>
+
+          <p class="mt-5 text-[rgba(246,251,255,.78)] text-base sm:text-lg reveal delay-2 max-w-2xl" data-reveal>
+            AFX Studio is an <span class="text-white font-semibold">all‑in‑one</span> creative & digital studio.
+            We design, animate, and launch assets that feel modern — from <span class="text-white font-semibold">graphics</span> and <span class="text-white font-semibold">social media</span> to <span class="text-white font-semibold">websites</span>, <span class="text-white font-semibold">UI/UX</span> and <span class="text-white font-semibold">3D visuals Every project is crafted with precision, creativity, and a clear focus on results, helping brands stand out, connect deeper, and grow with confidence in the digital world. </span>.
+          </p>
+
+          <div class="mt-7 flex flex-wrap items-center gap-3 reveal delay-3" data-reveal>
+            <a class="btn btn-primary" href="#work">View Work</a>
+            <a class="btn btn-ghost" href="#services">Explore Services</a>
+            <a class="btn btn-ghost" href="#contact">Quick Contact</a>
+          </div>
+
+          <div class="mt-10 grid sm:grid-cols-3 gap-3 tilt-wrap">
+            <div class="glass rounded-2xl p-4 reveal" data-reveal>
+              <div class="text-sm text-[rgba(246,251,255,.72)]">Delivery</div>
+              <div class="mt-1 text-xl font-extrabold">Fast + Clean</div>
+              <div class="mt-2 text-xs text-[rgba(246,251,255,.72)]">Clear timeline, polished output.</div>
+            </div>
+            <div class="glass rounded-2xl p-4 reveal delay-1" data-reveal>
+              <div class="text-sm text-[rgba(246,251,255,.72)]">Quality</div>
+              <div class="mt-1 text-xl font-extrabold">Premium Look</div>
+              <div class="mt-2 text-xs text-[rgba(246,251,255,.72)]">Modern design systems + motion.</div>
+            </div>
+            <div class="glass rounded-2xl p-4 reveal delay-2" data-reveal>
+              <div class="text-sm text-[rgba(246,251,255,.72)]">Support</div>
+              <div class="mt-1 text-xl font-extrabold">All‑in‑One</div>
+              <div class="mt-2 text-xs text-[rgba(246,251,255,.72)]">Graphics, web, 3D — one team.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="relative">
+            <div class="absolute -inset-6 bg-[radial-gradient(circle_at_30%_20%,rgba(247,198,0,.25),transparent_55%),radial-gradient(circle_at_80%_70%,rgba(95,208,255,.20),transparent_55%)] blur-2xl opacity-80"></div>
+
+            <div class="relative glass rounded-3xl p-6 md:p-7 ring-anim tilt" data-tilt>
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">Signature</div>
+                  <div class="text-2xl font-extrabold tracking-tight">AFX Motion + 3D</div>
+                </div>
+                <div class="h-10 w-10 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center">
+                  <span class="text-[var(--accent)] font-extrabold">3D</span>
+                </div>
+              </div>
+
+              <div class="mt-6 grid md:grid-cols-2 gap-5 items-center">
+                <div class="cube-wrap mx-auto">
+                  <div class="cube" aria-label="3D rotating cube">
+                    <div class="face front"><div class="text-sm"><strong>Brand</strong><br/>Identity</div></div>
+                    <div class="face back"><div class="text-sm"><strong>Web</strong><br/>Launch</div></div>
+                    <div class="face right"><div class="text-sm"><strong>3D</strong><br/>Visuals</div></div>
+                    <div class="face left"><div class="text-sm"><strong>Motion</strong><br/>Reels</div></div>
+                    <div class="face top"><div class="text-sm"><strong>UI/UX</strong><br/>Design</div></div>
+                    <div class="face bottom"><div class="text-sm"><strong>Social</strong><br/>Creatives</div></div>
+                  </div>
+                </div>
+
+                <div class="space-y-3">
+                  <div class="glass rounded-2xl p-4">
+                    <div class="text-sm font-bold">Everything in one pipeline</div>
+                    <div class="mt-1 text-xs text-[rgba(246,251,255,.72)]">Design → Motion → Export → Launch</div>
+                  </div>
+                  <div class="glass rounded-2xl p-4">
+                    <div class="text-sm font-bold">Animated, premium, consistent</div>
+                    <div class="mt-1 text-xs text-[rgba(246,251,255,.72)]">Brand guidelines.</div>
+                  </div>
+                  <div class="flex gap-2">
+                    <a class="btn btn-primary flex-1 justify-center inline-flex" href="#inquiry">Start Project</a>
+                    <a class="btn btn-ghost flex-1 justify-center inline-flex" href="#afx-about-section">Know More</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex flex-wrap items-center gap-2 text-xs text-[rgba(246,251,255,.72)]">
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Logo</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Posters</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Reels</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">3D Ads</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Websites</span>
+              </div>
+            </div>
+
+            <div class="mt-4 text-center text-xs text-[rgba(246,251,255,.60)]">Tip: cards are interactive (3D tilt + hover).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee (About ke upar) -->
+<div class="marquee-3d" style="overflow:hidden; white-space:nowrap; background: linear-gradient(90deg,#f7c600,#ffdd55,#f7c600); padding:20px 0; text-align:center;">
+    <div class="marquee-track">
+        <span class="marquee-item">✦ GRAPHIC DESIGN</span>
+        <span class="marquee-item">✦ VIDEO EDITING</span>
+        <span class="marquee-item">✦ MOTION GRAPHICS</span>
+        <span class="marquee-item">✦ LOGO DESIGN</span>
+        <span class="marquee-item">✦ BRANDING</span>
+        <span class="marquee-item">✦ SOCIAL MEDIA</span>
+        <span class="marquee-item">✦ WEB DESIGN</span>
+        <span class="marquee-item">✦ 3D ANIMATION</span>
+        <!-- Repeat again for smooth infinite scroll -->
+        <span class="marquee-item">✦ GRAPHIC DESIGN</span>
+        <span class="marquee-item">✦ VIDEO EDITING</span>
+        <span class="marquee-item">✦ MOTION GRAPHICS</span>
+        <span class="marquee-item">✦ LOGO DESIGN</span>
+        <span class="marquee-item">✦ BRANDING</span>
+        <span class="marquee-item">✦ SOCIAL MEDIA</span>
+        <span class="marquee-item">✦ WEB DESIGN</span>
+        <span class="marquee-item">✦ 3D ANIMATION</span>
+    </div>
+</div>
+
+<style>
+.marquee-track {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marqueeMove 15s linear infinite;
+}
+
+.marquee-item {
+    display: inline-block;
+    margin: 0 40px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #0a1d3f;
+}
+
+/* Infinite smooth marquee animation */
+@keyframes marqueeMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* content repeated so -50% works */
+}
+</style>
+   
+<!-- ================= ABOUT AFX STUDIO SECTION ================= -->
+<section id="about" style="padding:100px 20px; background:transparent;">
+  <div style="max-width:1400px; margin:auto; display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start;">
+
+    <!-- LEFT SIDE: ABOUT AFX STUDIO -->
+    <div>
+      <h2 style="font-size:36px; font-weight:700; margin-bottom:20px; color:#f7c600;">About AFX Studio</h2>
+      <p style="opacity:.85; line-height:1.7; font-size:16px; margin-bottom:16px;">
+        Founded in <b>2025</b> by <b>Asad Khan</b> and <b>Alvina Khan</b>, <b>AFX Studio</b> is Hyderabad’s 
+        first <b>all-in-one creative studio</b> designed to meet every creative requirement of businesses, brands, 
+        content creators, and events. From cinematic video editing, motion graphics, VFX, 2D & 3D animations, 
+        branding, digital solutions to website design — AFX Studio provides a structured, professional, and 
+        future-ready workflow to deliver premium output for every client.  
+
+        The studio brings together a team of 30+ experts who focus on creativity, precision, and innovation 
+        across all projects. Whether it’s producing a high-quality social media reel, a corporate video, 
+        an ad film, or a wedding cinematic edit, AFX Studio ensures every deliverable is on-brand, 
+        visually stunning, and professionally polished. We serve clients locally in Hyderabad and worldwide 
+        with remote editing solutions, making your project scalable and consistent across all platforms.
+      </p>
+    </div>
+
+    <!-- RIGHT SIDE: TOOLS & SERVICES -->
+    <div>
+      <!-- TOOLS -->
+      <h3 style="font-size:22px; font-weight:600; margin-bottom:12px;">Tools & Software</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:25px;">
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15); font-size:14px;">
+          <img src="https://img.icons8.com/color/24/adobe-premiere-pro.png" style="width:20px;height:20px;"> Premiere Pro
+        </span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15); font-size:14px;">
+          <img src="https://img.icons8.com/color/24/adobe-after-effects.png" style="width:20px;height:20px;"> After Effects
+        </span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15); font-size:14px;">
+          <img src="https://img.icons8.com/color/24/adobe-illustrator.png" style="width:20px;height:20px;"> Illustrator
+        </span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15); font-size:14px;">
+          <img src="https://img.icons8.com/color/24/adobe-photoshop.png" style="width:20px;height:20px;"> Photoshop
+        </span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15); font-size:14px;">
+          <img src="https://img.icons8.com/color/24/blender.png" style="width:20px;height:20px;"> Blender
+        </span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15); font-size:14px;">
+          <img src="https://img.icons8.com/color/24/canva.png" style="width:20px;height:20px;"> Canva
+        </span>
+        <span style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15); font-size:14px;">
+          <img src="https://img.icons8.com/color/24/davinci-resolve.png" style="width:20px;height:20px;"> DaVinci
+        </span>
+      </div>
+
+      <!-- SERVICES -->
+      <h3 style="font-size:22px; font-weight:600; margin-bottom:12px;">Our Services</h3>
+      <div style="max-height:600px; overflow-y:auto; padding-right:6px;">
+        <ul style="list-style:disc; padding-left:20px; font-size:14px; opacity:.85; columns:1; gap:6px;">
+          <li>Editing & Post-Production</li>
+          <li>Multi-Camera Editing</li>
+          <li>Event Video Editing</li>
+          <li>Wedding Highlights & Cinematic Edits</li>
+          <li>Documentary Editing</li>
+          <li>Special Story Editing</li>
+          <li>Short Films Editing</li>
+          <li>Podcast Editing</li>
+          <li>News & Broadcast Editing</li>
+          <li>Social Media Shorts/Reels</li>
+          <li>Music Video Editing</li>
+          <li>Graphics & Design</li>
+          <li>Logo Design & Logo Animation</li>
+          <li>YouTube Intros & Outros</li>
+          <li>Motion Graphics</li>
+          <li>Banners & Posters</li>
+          <li>Visiting Cards & Digital Flyers</li>
+          <li>YouTube Thumbnails & Social Media Creatives</li>
+          <li>30-Experts</li>
+          <li>VFX & Advanced Editing</li>
+          <li>Green Screen Editing</li>
+          <li>Visual Effects (VFX)</li>
+          <li>Color Grading & Cinematic Look</li>
+          <li>2D & 3D Animation Support</li>
+          <li>Title Sequences & Transitions</li>
+          <li>Video Production & Shoots</li>
+          <li>Wedding & Pre-Wedding Shoots</li>
+          <li>Birthday Parties & Family Ceremonies</li>
+          <li>Corporate Shoots & Business Events</li>
+          <li>Grand Shop Openings & Inaugurations</li>
+          <li>Ad Films & Product Shoots</li>
+          <li>Digital Solutions</li>
+          <li>Website Design & Development</li>
+          <li>Social Media Page Management</li>
+          <li>Boosting Low-View Pages</li>
+          <li>Complete Brand Building Online</li>
+          <li>Broadcast Shoots</li>
+          <li>Podcasts Setups & Shoots</li>
+          <li>Documentaries</li>
+          <li>Special Stories / Interviews</li>
+          <li>Shoot Services in Hyderabad (50KM), Editing Worldwide</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- ================= END ABOUT AFX STUDIO ================= -->
+
+    <!-- Services -->
+    <section id="services" class="mt-16 md:mt-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div class="reveal" data-reveal>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Services (All‑in‑One)</h2>
+            <p class="mt-3 text-[rgba(246,251,255,.78)] max-w-2xl">Har service ka clear purpose hai — so visitors ko confusion nahi hota. Choose one, or take a complete studio package.</p>
+          </div>
+          <div class="reveal delay-1" data-reveal>
+            <a class="btn btn-ghost" href="#inquiry">Tell us your requirement →</a>
+          </div>
+        </div>
+
+        <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- card -->
+          <div class="glass rounded-3xl p-6 tilt ring-anim reveal" data-reveal data-tilt>
+            <div class="tilt-pop">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">01</div>
+                  <div class="mt-1 text-xl font-extrabold">Brand Identity</div>
+                </div>
+                <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">B</div>
+              </div>
+              <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Logo, colors, fonts, brand guidelines, business card, stationery.</p>
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Logo</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Guidelines</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Mockups</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6 tilt ring-anim reveal delay-1" data-reveal data-tilt>
+            <div class="tilt-pop">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">02</div>
+                  <div class="mt-1 text-xl font-extrabold">Graphic Design</div>
+                </div>
+                <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">G</div>
+              </div>
+              <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Posters, banners, thumbnails, packaging, menus, print creatives.</p>
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Poster</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Packaging</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Print</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6 tilt ring-anim reveal delay-2" data-reveal data-tilt>
+            <div class="tilt-pop">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">03</div>
+                  <div class="mt-1 text-xl font-extrabold">Social Media Kit</div>
+                </div>
+                <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">S</div>
+              </div>
+              <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Instagram templates, stories, carousel, highlight covers, content system.</p>
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Templates</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Reels Covers</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Carousels</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6 tilt ring-anim reveal" data-reveal data-tilt>
+            <div class="tilt-pop">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">04</div>
+                  <div class="mt-1 text-xl font-extrabold">Web Design + Dev</div>
+                </div>
+                <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">W</div>
+              </div>
+              <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Landing pages, portfolio sites, business websites — fast and responsive.</p>
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Landing</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Portfolio</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">SEO Ready</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6 tilt ring-anim reveal delay-1" data-reveal data-tilt>
+            <div class="tilt-pop">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">05</div>
+                  <div class="mt-1 text-xl font-extrabold">Motion + Reels</div>
+                </div>
+                <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">M</div>
+              </div>
+              <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Animations, promo reels, typography motion, transitions, exports.</p>
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Reels</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Ads</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Shorts</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass rounded-3xl p-6 tilt ring-anim reveal delay-2" data-reveal data-tilt>
+            <div class="tilt-pop">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">06</div>
+                  <div class="mt-1 text-xl font-extrabold">3D Visuals</div>
+                </div>
+                <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">3</div>
+              </div>
+              <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Product mockups, 3D posters, 3D ads, stylized scenes for brands.</p>
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Mockups</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Scenes</span>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Lighting</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 glass rounded-3xl p-6 reveal" data-reveal>
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <div class="text-xs text-[rgba(246,251,255,.72)]">Recommended for businesses</div>
+              <div class="mt-1 text-2xl font-extrabold">Complete Studio Package</div>
+              <p class="mt-2 text-sm text-[rgba(246,251,255,.78)]">Branding + Social Kit + Website + Motion highlights. Perfect for new launch / rebrand.</p>
+            </div>
+            <div class="flex gap-2">
+              <a class="btn btn-primary" href="#inquiry">Get Package Quote</a>
+              <a class="btn btn-ghost" href="#work-showcase">See Examples</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3D WORK SHOWCASE SECTION ===== -->
+<style>
+#work-showcase{
+  padding:100px 20px;
+  background:transparent;
+  color:#fff;
+  text-align:center;
+}
+
+#work-showcase h2{font-size:42px;font-weight:800}
+#work-showcase span{color:#f7c600}
+#work-showcase p{opacity:.7;max-width:520px;margin:10px auto 40px}
+
+.showcase-container{
+  perspective:1600px;
+  height:520px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.carousel-3d{
+  width:320px;
+  height:420px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.23,1,.32,1);
+}
+
+.project-card{
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.15);
+  overflow:hidden;
+  transition:.4s;
+  display:flex;
+  flex-direction:column;
+}
+
+.project-card img{
+  width:100%;
+  flex-grow:1;           /* 👈 Card height ka maximum use kare */
+  object-fit:cover;      /* 👈 Poora card fill kare, space nahi rahe */
+  background:transparent;
+}
+
+.project-card h3{
+  padding:12px 15px;
+  margin:0;
+  font-weight:600;
+  text-align:center;
+}
+
+.project-card.active{
+  border-color:#f7c600;
+  box-shadow:0 0 30px rgba(247,198,0,.3);
+}
+
+.nav-btn{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:1px solid #fff3;
+  background:transparent;
+  color:#fff;
+  font-size:24px;
+  cursor:pointer;
+}
+
+.nav-btn:hover{
+  background:#f7c600;
+  color:#000;
+}
+
+/* 📱 Mobile Responsive */
+@media (max-width:768px){
+  #work-showcase{padding:60px 10px}
+  #work-showcase h2{font-size:28px}
+  #work-showcase p{font-size:14px;margin-bottom:25px}
+  .showcase-container{height:360px}
+  .carousel-3d{width:240px;height:320px}
+  .project-card img{flex-grow:1;height:auto}
+  .nav-btn{width:42px;height:42px;font-size:22px}
+}
+</style>
+
+<section id="work-showcase">
+  <h2>SELECTED <span>WORKS</span></h2>
+  <p>Add your own 3D, coding, UI, branding projects here.</p>
+
+  <div class="showcase-container">
+    <div id="carousel" class="carousel-3d"></div>
+  </div>
+
+  <div style="display:flex;gap:20px;justify-content:center;margin-top:25px">
+    <button onclick="prev()" class="nav-btn">‹</button>
+    <button onclick="next()" class="nav-btn">›</button>
+  </div>
+</section>
+
+<script>
+const projects = [
+ {title:"VIDEO EDITING",        img:"assets/images/a1.png"},
+ {title:"Business solution",img:"assets/images/a2.jpeg"},
+ {title:"UI Design",     img:"assets/images/a3.jpeg"},
+ {title:"Graphic Design & Branding",      img:"assets/images/a4.png"}
+ 
+];
+
+const carousel = document.getElementById("carousel");
+let index = 0, startX = 0, isDown = false;
+const radius = 360;
+
+function init(){
+  projects.forEach((p,i)=>{
+    const c = document.createElement("div");
+    c.className = "project-card";
+    c.innerHTML = `<img src="${p.img}"><h3>${p.title}</h3>`;
+    const angle = i/projects.length*360;
+    const x = Math.sin(angle*Math.PI/180)*radius;
+    const z = Math.cos(angle*Math.PI/180)*radius;
+    c.style.transform = `translate3d(${x}px,0,${z}px) rotateY(${angle}deg)`;
+    carousel.appendChild(c);
+  });
+  update();
+}
+
+function update(){
+  carousel.style.transform = `rotateY(${-index*(360/projects.length)}deg)`;
+  [...carousel.children].forEach((c,i)=>{
+    c.classList.toggle("active", i===((index%projects.length)+projects.length)%projects.length);
+  });
+}
+
+function next(){ index++; update(); }
+function prev(){ index--; update(); }
+
+// 🖱️ Mouse Swipe
+carousel.addEventListener("mousedown",e=>{isDown=true;startX=e.clientX});
+window.addEventListener("mouseup",()=>isDown=false);
+window.addEventListener("mousemove",e=>{
+  if(!isDown) return;
+  let diff = e.clientX - startX;
+  if(diff>60){ prev(); isDown=false }
+  if(diff<-60){ next(); isDown=false }
+});
+
+// 📱 Touch Swipe
+carousel.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+carousel.addEventListener("touchend",e=>{
+  let endX = e.changedTouches[0].clientX;
+  let diff = endX - startX;
+  if(diff>50) prev();
+  if(diff<-50) next();
+});
+
+init();
+</script>
+
+<!-- ========== 3D PORTFOLIO SECTION (PNG 10 + 10) ========== -->
+<section id="portfolio-3d" class="relative py-24">
+
+  <!-- Heading -->
+  <div class="text-center mb-16">
+    <h2 class="text-4xl font-bold">Design Gallery</h2>
+    <p class="opacity-70 mt-2">Swipe cards to see my latest work</p>
+  </div>
+
+  <!-- TWO GALLERIES -->
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20">
+
+    <!-- GALLERY 1 -->
+    <div class="flex flex-col items-center">
+      <div class="stack-container" id="stack1"></div>
+      <div class="flex gap-4 mt-10">
+        <button class="prevBtn">❮</button>
+        <button class="nextBtn">❯</button>
+      </div>
+    </div>
+
+    <!-- GALLERY 2 -->
+    <div class="flex flex-col items-center">
+      <div class="stack-container" id="stack2"></div>
+      <div class="flex gap-4 mt-10">
+        <button class="prevBtn">❮</button>
+        <button class="nextBtn">❯</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== CSS ===== -->
+  <style>
+    #portfolio-3d .stack-container{
+      perspective:2000px;
+      width:400px;
+      height:550px;
+      position:relative;
+    }
+    @media(max-width:640px){
+      #portfolio-3d .stack-container{
+        width:300px;
+        height:420px;
+      }
+      #portfolio-3d .card{
+        border-width:4px;
+      }
+    }
+    #portfolio-3d .card{
+      position:absolute;
+      inset:0;
+      border-radius:24px;
+      background:transparent;
+      overflow:hidden;
+      border:1px solid #fff;
+      cursor:grab;
+      box-shadow:0 30px 60px -12px rgba(0,0,0,.4);
+      user-select:none;
+      touch-action:none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #portfolio-3d .card img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      pointer-events:none;
+    }
+    #portfolio-3d button{
+      padding:14px 18px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.15);
+      backdrop-filter:blur(8px);
+      transition:.2s;
+      background: transparent;
+    }
+    #portfolio-3d button:hover{transform:scale(1.05);}
+  </style>
+
+  <!-- ===== JS ===== -->
+  <script>
+    gsap.registerPlugin(Draggable);
+
+    /* 🔹 YAHI PAR SIRF PNG PATH CHANGE KARNA HAI */
+
+    const gallery1Images = [
+      'https://ik.imagekit.io/afxstudio/SAGARHOMEO.pdf.png',
+      'https://ik.imagekit.io/afxstudio/SAGARHOMEO.pdf.png',
+      'https://ik.imagekit.io/afxstudio/Copy%20of%20Purple%20and%20Cream%20Indian%20Wedding%20Invitation.png',
+      'https://ik.imagekit.io/afxstudio/p9.png',
+      'https://ik.imagekit.io/afxstudio/p10.png',
+      'https://ik.imagekit.io/afxstudio/p2.png',
+      'https://ik.imagekit.io/afxstudio/p6.png',
+      'https://ik.imagekit.io/afxstudio/Copy%20of%20Purple%20and%20Cream%20Indian%20Wedding%20Invitation.png',
+      'https://ik.imagekit.io/afxstudio/a_Mera_number_bhi_ment.png',
+      'https://ik.imagekit.io/afxstudio/p6.png'
+    ];
+
+    const gallery2Images = [
+      'https://ik.imagekit.io/afxstudio/d3.png',
+      'https://ik.imagekit.io/afxstudio/d6.png',
+      'https://ik.imagekit.io/afxstudio/d1.png',
+      'https://ik.imagekit.io/afxstudio/d7.png',
+      'https://ik.imagekit.io/afxstudio/d5.png',
+      'https://ik.imagekit.io/afxstudio/d4.png',
+      'https://ik.imagekit.io/afxstudio/d8.png',
+      'https://ik.imagekit.io/afxstudio/d2.png',
+      'https://ik.imagekit.io/afxstudio/d9.png',
+      'https://ik.imagekit.io/afxstudio/d10.png'
+    ];
+
+    function createGallery(stackId, images){
+      const stack = document.getElementById(stackId);
+      let cards = [];
+
+      images.forEach(src=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<img src="${src}" alt="">`;
+        stack.appendChild(card);
+        cards.push(card);
+      });
+
+      function update(){
+        cards.forEach((c,i)=>{
+          gsap.to(c,{
+            y:i*-12,
+            z:i*-60,
+            scale:1-i*0.05,
+            rotationX:i*-2,
+            zIndex:cards.length-i,
+            opacity:i>6?0:1-i*0.12,
+            duration:.5
+          });
+          if(i===0) drag(c);
+        });
+      }
+
+      function drag(card){
+        Draggable.create(card,{
+          type:"x,y",
+          onRelease(){
+            Math.abs(this.x)>120
+              ? swipe(card,this.x>0?600:-600)
+              : gsap.to(card,{x:0,y:0});
+          }
+        });
+      }
+
+      function swipe(card,x){
+        gsap.to(card,{
+          x,opacity:0,scale:.7,duration:.35,
+          onComplete(){
+            cards.push(cards.shift());
+            gsap.set(card,{x:0,opacity:1,scale:1});
+            update();
+          }
+        });
+      }
+
+      const wrap = stack.parentElement;
+      wrap.querySelector('.nextBtn').onclick = ()=> swipe(cards[0],600);
+      wrap.querySelector('.prevBtn').onclick = ()=>{
+        cards.unshift(cards.pop());
+        update();
+      };
+
+      update();
+    }
+
+    createGallery('stack1', gallery1Images);
+    createGallery('stack2', gallery2Images);
+  </script>
+
+</section>
+<!-- ========================================================= -->
+
+<section class="vs-showcase">
+<style>
+.vs-showcase{
+ --accent:#f7c600;
+ --accent2:#ffdd55;
+ --text:#f6fbff;
+ --muted:rgba(246,251,255,.72);
+ --glass:rgba(255,255,255,.06);
+ --stroke:rgba(255,255,255,.14);
+ padding:80px 18px;
+ font-family:Inter,sans-serif;
+ background:transparent;
+}
+
+/* HEADING */
+.vs-heading{
+ max-width:1400px;
+ margin:0 auto 60px;
+ text-align:center;
+}
+.vs-heading h1{
+ font-size:42px;
+ font-weight:800;
+ color:var(--text);
+}
+.vs-heading p{
+ font-size:16px;
+ color:var(--muted);
+}
+
+/* GRID */
+.vs-grid{
+ max-width:1400px;
+ margin:auto;
+ display:grid;
+ gap:36px;
+ grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+ perspective:1800px;
+}
+
+/* CARD */
+.vs-card{
+ position:relative;
+ border-radius:26px;
+ transform-style:preserve-3d;
+ transition:transform .45s cubic-bezier(.23,1,.32,1);
+}
+.vs-card::before{
+ content:"";
+ position:absolute;
+ inset:-2px;
+ border-radius:28px;
+ background:linear-gradient(135deg,var(--accent),transparent 45%,transparent 55%,var(--accent2));
+ opacity:0;
+ transition:.4s;
+ z-index:-1;
+}
+.vs-card:hover::before{opacity:1}
+
+.vs-card:hover{
+ transform:rotateX(6deg) rotateY(-6deg) translateY(-14px);
+}
+
+/* WRAP */
+.vs-wrap{
+ background:var(--glass);
+ border:1px solid var(--stroke);
+ backdrop-filter:blur(12px);
+ border-radius:26px;
+ overflow:hidden;
+ box-shadow:0 30px 80px rgba(0,0,0,.45);
+ transform:translateZ(40px);
+}
+
+/* VIDEO */
+.vs-video{
+ aspect-ratio:16/9;
+ position:relative;
+ overflow:hidden;
+}
+.vs-video iframe{
+ width:100%;
+ height:100%;
+ border:0;
+}
+
+/* INFO */
+.vs-info{padding:22px}
+.vs-cat{
+ font-size:11px;
+ font-weight:700;
+ letter-spacing:1px;
+ padding:6px 14px;
+ border-radius:20px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:#000;
+ display:inline-block;
+ margin-bottom:10px;
+}
+.vs-title{
+ font-size:18px;
+ font-weight:700;
+ color:var(--text);
+}
+.vs-desc{
+ font-size:14px;
+ color:var(--muted);
+}
+.vs-stats{
+ display:flex;
+ gap:18px;
+ margin-top:14px;
+ padding-top:14px;
+ border-top:1px solid var(--stroke);
+ font-size:13px;
+ color:var(--muted);
+}
+
+/* MOBILE SAFETY */
+@media(max-width:768px){
+ .vs-card:hover{
+  transform:none;
+ }
+ .vs-wrap{
+  backdrop-filter:none;
+ }
+}
+</style>
+
+<div class="vs-heading">
+ <h1>Logo & Animation</h1>
+ <p>Premium motion design, VFX & cinematic visuals</p>
+</div>
+
+<div class="vs-grid">
+
+<!-- V1 -->
+<div class="vs-card"><div class="vs-wrap"><div class="vs-video">
+<iframe src="https://www.youtube-nocookie.com/embed/J8LoS8uQ35A?autoplay=1&mute=1&loop=1&playlist=J8LoS8uQ35A&controls=0&playsinline=1&rel=0"
+allow="autoplay; encrypted-media"></iframe>
+</div><div class="vs-info"><span class="vs-cat">Intro</span><h3 class="vs-title">Logo Intro</h3><p class="vs-desc">Cinematic Branding</p></div></div></div>
+
+<!-- V2 -->
+<div class="vs-card"><div class="vs-wrap"><div class="vs-video">
+<iframe src="https://www.youtube-nocookie.com/embed/UR1olKZ2SZA?autoplay=1&mute=1&loop=1&playlist=UR1olKZ2SZA&controls=0&playsinline=1&rel=0"
+allow="autoplay; encrypted-media"></iframe>
+</div><div class="vs-info"><span class="vs-cat">Cinematic</span><h3 class="vs-title">Motion Reel</h3><p class="vs-desc">Visual Story</p></div></div></div>
+
+<!-- V3 -->
+<div class="vs-card"><div class="vs-wrap"><div class="vs-video">
+<iframe src="https://www.youtube-nocookie.com/embed/mjvq7vAeNFE?autoplay=1&mute=1&loop=1&playlist=mjvq7vAeNFE&controls=0&playsinline=1&rel=0"
+allow="autoplay; encrypted-media"></iframe>
+</div><div class="vs-info"><span class="vs-cat">VFX</span><h3 class="vs-title">Visual Effects</h3><p class="vs-desc">High Impact</p></div></div></div>
+
+<!-- V4 -->
+<div class="vs-card"><div class="vs-wrap"><div class="vs-video">
+<iframe src="https://www.youtube-nocookie.com/embed/3kp2Ur6Vzkw?autoplay=1&mute=1&loop=1&playlist=3kp2Ur6Vzkw&controls=0&playsinline=1&rel=0"
+allow="autoplay; encrypted-media"></iframe>
+</div><div class="vs-info"><span class="vs-cat">3D</span><h3 class="vs-title">3D Animation</h3><p class="vs-desc">Brand Visuals</p></div></div></div>
+
+<!-- V5–V8 -->
+<!-- iframe src="#" same as you asked -->
+
+</div>
+</section>
+    
+    <!-- Team / Founders Section -->
+<section id="team" class="py-16 md:py-24 relative">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+    <!-- Header -->
+    <div class="text-center mb-16 reveal" data-reveal>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4">
+        Meet the <span class="gradient-text">Visionaries</span>
+      </h1>
+      <p class="text-lg text-[rgba(246,251,255,.75)] max-w-2xl mx-auto">
+        Founded by creative pioneers who transform brands with exceptional visual storytelling, motion design, 3D creations, and strategic design thinking.
+      </p>
+    </div>
+
+    <!-- Founder Cards -->
+    <div class="grid md:grid-cols-2 gap-6 mb-12">
+      <!-- Asad Khan -->
+      <div class="glass rounded-3xl p-6 ring-anim reveal tilt" data-reveal data-tilt>
+        <div class="tilt-pop">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="avatar-glow relative">
+              <div class="h-16 w-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-yellow-500 grid place-items-center font-black text-2xl text-black">AK</div>
+              <div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-4 h-4 border-2 border-[#0a0a0f] pulse-dot"></div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <h3 class="text-xl font-extrabold">Asad Khan</h3>
+                <span class="px-2 py-0.5 text-[10px] font-bold bg-[var(--accent)] text-black rounded-full">FOUNDER</span>
+              </div>
+              <p class="text-sm text-[rgba(246,251,255,.72)]">Creative Director • Video Editor</p>
+              <p class="text-xs text-[rgba(246,251,255,.55)] mt-1">7+ years in creative industry</p>
+            </div>
+          </div>
+
+          <p class="text-sm text-[rgba(246,251,255,.85)] mb-4 leading-relaxed">
+            <span class="text-[var(--accent)] font-semibold">"We believe every brand deserves a premium look."</span>
+            From the basics of editing to full creative solutions, Asad has built Afx into Hyderabad’s leading all-in-one creative studio.
+          </p>
+
+          <!-- Skills -->
+          <div class="flex flex-wrap gap-2 mb-4 text-xs">
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Brand Strategy</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Art Direction</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Client Relations</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">3D Design</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Motion Graphics</span>
+          </div>
+
+          <!-- Software -->
+          <div class="mb-6">
+            <div class="text-xs text-[rgba(246,251,255,.6)] mb-2">Software Expertise</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="software-badge"><span class="software-icon">🎨</span> Illustrator</span>
+              <span class="software-badge"><span class="software-icon">🎬</span> Premiere Pro</span>
+              <span class="software-badge"><span class="software-icon">✨</span> After Effects</span>
+              <span class="software-badge"><span class="software-icon">🧊</span> Blender</span>
+              <span class="software-badge"><span class="software-icon">🎭</span> Photoshop</span>
+              <span class="software-badge"><span class="software-icon">📐</span> InDesign</span>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-xl font-black text-[var(--accent)]">500+</div>
+              <div class="text-[10px] text-[rgba(246,251,255,.6)]">Projects Done</div>
+            </div>
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-xl font-black text-[var(--accent)]">7+</div>
+              <div class="text-[10px] text-[rgba(246,251,255,.6)]">Years Exp</div>
+            </div>
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-xl font-black text-[var(--accent)]">50+</div>
+              <div class="text-[10px] text-[rgba(246,251,255,.6)]">Brands</div>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <a class="btn btn-primary flex-1 justify-center" href="#inquiry">Hire Asad</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alvina Khan -->
+      <div class="glass rounded-3xl p-6 ring-anim reveal tilt delay-1" data-reveal data-tilt>
+        <div class="tilt-pop">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="avatar-glow relative">
+              <div class="h-16 w-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 grid place-items-center font-black text-2xl text-white">AK</div>
+              <div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-4 h-4 border-2 border-[#0a0a0f] pulse-dot"></div>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <h3 class="text-xl font-extrabold">Alvina Khan</h3>
+                <span class="px-2 py-0.5 text-[10px] font-bold bg-purple-500/30 text-purple-300 rounded-full border border-purple-500/30">DIRECTOR</span>
+              </div>
+              <p class="text-sm text-[rgba(246,251,255,.72)]">Creative Director • M.Com</p>
+              <p class="text-xs text-[rgba(246,251,255,.55)] mt-1">4+ years in creative industry</p>
+            </div>
+          </div>
+
+          <p class="text-sm text-[rgba(246,251,255,.85)] mb-4 leading-relaxed">
+            <span class="text-purple-400 font-semibold">"Creativity is intelligence having fun."</span>
+            Alvina brings perfection in motion graphics, 3D design, and full creative direction, helping brands stand out in a competitive market.
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-4 text-xs">
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Motion Design</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Graphic Design</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Editing</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Branding</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Web Designing</span>
+            
+          </div>
+
+          <!-- Software -->
+          <div class="mb-6">
+            <div class="text-xs text-[rgba(246,251,255,.6)] mb-2">Software Expertise</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="software-badge"><span class="software-icon">🧊</span> Blender</span>
+              <span class="software-badge"><span class="software-icon">✨</span> After Effects</span>
+              <span class="software-badge"><span class="software-icon">🎬</span> Premiere Pro</span>
+              <span class="software-badge"><span class="software-icon">🎨</span> Illustrator</span>
+              <span class="software-badge"><span class="software-icon">🎭</span> Photoshop</span>
+              <span class="software-badge"><span class="software-icon">📐</span> InDesign</span>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-xl font-black text-purple-400">300+</div>
+              <div class="text-[10px] text-[rgba(246,251,255,.6)]">Animations</div>
+            </div>
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-xl font-black text-purple-400">5+</div>
+              <div class="text-[10px] text-[rgba(246,251,255,.6)]">Years Exp</div>
+            </div>
+            <div class="glass rounded-xl p-3 text-center">
+              <div class="text-xl font-black text-purple-400">40+</div>
+              <div class="text-[10px] text-[rgba(246,251,255,.6)]">3D Projects</div>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <a class="btn btn-primary flex-1 justify-center" href="#inquiry">Hire Alvina</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+  </div>
+</section>
+<!-- Inquiry Form -->
+<section id="inquiry" class="mt-16 md:mt-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="reveal" data-reveal>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Project Inquiry</h2>
+      <p class="mt-3 text-[rgba(246,251,255,.78)] max-w-2xl">Fill this form — we’ll reply with timeline + pricing range. (Demo form: it shows a success message on submit.)</p>
+    </div>
+
+    <div class="mt-8 grid lg:grid-cols-12 gap-6">
+      <!-- Inquiry Form -->
+      <div class="lg:col-span-7 glass rounded-3xl p-6 md:p-7 ring-anim reveal" data-reveal>
+        <form id="inquiryForm" class="grid sm:grid-cols-2 gap-4" novalidate>
+          <div class="sm:col-span-1">
+            <label class="text-sm font-semibold" for="name">Full Name</label>
+            <input class="mt-2 w-full field" id="name" name="name" autocomplete="name" placeholder="Your name" required />
+            <div class="help mt-1">Required</div>
+          </div>
+          <div class="sm:col-span-1">
+            <label class="text-sm font-semibold" for="brand">Brand/Business</label>
+            <input class="mt-2 w-full field" id="brand" name="brand" autocomplete="organization" placeholder="Business name" />
+            <div class="help mt-1">Optional</div>
+          </div>
+          <div class="sm:col-span-1">
+            <label class="text-sm font-semibold" for="email">Email</label>
+            <input class="mt-2 w-full field" id="email" name="email" type="email" autocomplete="email" placeholder="name@email.com" required />
+            <div class="help mt-1">Required</div>
+          </div>
+          <div class="sm:col-span-1">
+            <label class="text-sm font-semibold" for="phone">Phone/WhatsApp</label>
+            <input class="mt-2 w-full field" id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="+91…" required />
+            <div class="help mt-1">Required</div>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold" for="service">Service Needed</label>
+            <select class="mt-2 w-full field" id="service" name="service" required>
+              <option value="" selected disabled>Select a service</option>
+              <option>Brand Identity</option>
+              <option>Graphic Design (Poster/Thumbnail/Print)</option>
+              <option>Social Media Kit</option>
+              <option>Web Design + Development</option>
+              <option>Motion / Reels</option>
+              <option>3D Visuals</option>
+              <option>Complete Studio Package</option>
+            </select>
+            <div class="help mt-1">Required</div>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold" for="message">Project Details</label>
+            <textarea class="mt-2 w-full field min-h-[120px]" id="message" name="message" placeholder="Tell us what you want, deadline, references, number of designs…" required></textarea>
+            <div class="help mt-1">Add timeline + references for faster quote</div>
+          </div>
+
+          <div class="sm:col-span-2 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+            <div class="text-xs text-[rgba(246,251,255,.72)]">By submitting you agree to be contacted by AFX Studio.</div>
+            <div class="flex gap-2">
+              <button type="button" id="prefillBtn" class="btn btn-ghost">Auto‑Fill Demo</button>
+              <button class="btn btn-primary" type="submit" id="sendInquiryBtn">Send Inquiry</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Clear Quote + Timeline Section -->
+      <div class="lg:col-span-5 space-y-4">
+        <div class="glass rounded-3xl p-6 reveal" data-reveal>
+          <div class="text-xs text-[rgba(246,251,255,.72)]">What you’ll get</div>
+          <div class="mt-1 text-2xl font-extrabold">Clear Quote + Timeline</div>
+          <ul class="mt-4 space-y-2 text-sm text-[rgba(246,251,255,.78)]">
+            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Estimated cost range (basic → premium)</li>
+            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Delivery timeline & revision plan</li>
+            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Deliverables list (formats + sizes)</li>
+            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Optional add‑ons (motion/3D/web)</li>
+          </ul>
+        </div>
+
+        <!-- Fast Contact Section -->
+        <div class="glass rounded-3xl p-6 ring-anim tilt reveal delay-1" data-reveal data-tilt>
+          <div class="tilt-pop">
+            <div class="text-xs text-[rgba(246,251,255,.72)]">Fast contact</div>
+            <div class="mt-1 text-2xl font-extrabold">WhatsApp / Call</div>
+            <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Agar urgent hai, quick message bhi kar sakte ho.</p>
+            <div class="mt-4 flex flex-col sm:flex-row gap-2">
+              <a class="btn btn-primary inline-flex justify-center" href="#contact">Open Contact</a>
+              <a class="btn btn-ghost inline-flex justify-center" href="#work">View Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Note Section -->
+        <div class="glass rounded-3xl p-6 reveal delay-2" data-reveal>
+          <div class="text-xs text-[rgba(246,251,255,.72)]">Note</div>
+          <div class="mt-1 font-bold">Welcome to a Place Where Quality Meets Trust</div>
+          <div class="mt-2 text-sm text-[rgba(246,251,255,.78)]">We don’t just offer services — we deliver experiences.
+Our goal is simple: to provide you with reliable, high-quality solutions that truly make a difference..</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('sendInquiryBtn').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent form submission to server
+
+    // Collect form data
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const service = document.getElementById('service').value;
+    const message = document.getElementById('message').value;
+
+    // Create pre-filled WhatsApp message
+    const whatsappMessage = `
+      *Project Inquiry*%0A%0A
+      *Name:* ${name}%0A
+      *Email:* ${email}%0A
+      *Phone:* ${phone}%0A
+      *Service:* ${service}%0A
+      *Message:* ${message}
+    `;
+
+    // WhatsApp link with pre-filled message
+    const whatsappLink = `https://wa.me/+919381073943?text=${encodeURIComponent(whatsappMessage)}`;
+
+    // Open WhatsApp with the pre-filled message
+    window.open(whatsappLink, '_blank');
+  });
+</script>
+
+    <!-- Contact -->
+    <section id="contact" class="mt-16 md:mt-24 pb-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="reveal" data-reveal>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Contact</h2>
+          <p class="mt-3 text-[rgba(246,251,255,.78)] max-w-2xl">For further information, you may contact us using the details below..</p>
+        </div>
+
+        <div class="mt-8 grid lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 space-y-4">
+            <div class="glass rounded-3xl p-6 ring-anim reveal" data-reveal>
+              <div class="text-xs text-[rgba(246,251,255,.72)]">Primary</div>
+              <div class="mt-1 text-2xl font-extrabold">AFX Studio</div>
+              <div class="mt-3 grid gap-3 text-sm text-[rgba(246,251,255,.78)]">
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <div class="text-xs text-[rgba(246,251,255,.72)]">Email</div>
+                    <div class="font-semibold">afxstudio07@gmail.com</div>
+                  </div>
+                  <button class="btn btn-ghost" data-copy="hello@afxstudio.example">Copy</button>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <div class="text-xs text-[rgba(246,251,255,.72)]">WhatsApp</div>
+                    <div class="font-semibold">+91 9381073943</div>
+                  </div>
+                  <button class="btn btn-ghost" data-copy="+91 9381073943">Copy</button>
+                </div>
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">Location</div>
+                  <div class="font-semibold">India (Remote + On‑Call)</div>
+                </div>
+              </div>
+              <div class="mt-5 flex flex-col sm:flex-row gap-2">
+                <a class="btn btn-primary inline-flex justify-center" href="#inquiry">Send Inquiry</a>
+                <a class="btn btn-ghost inline-flex justify-center" href="#home">Back to Top</a>
+              </div>
+            </div>
+
+            <div class="glass rounded-3xl p-6 tilt ring-anim reveal delay-1" data-reveal data-tilt>
+              <div class="tilt-pop">
+                <div class="text-xs text-[rgba(246,251,255,.72)]">Business hours</div>
+                <div class="mt-1 text-2xl font-extrabold">Mon–Sat</div>
+                <div class="mt-2 text-sm text-[rgba(246,251,255,.78)]">10:00 AM – 8:00 PM (IST)</div>
+                <div class="mt-4 text-xs text-[rgba(246,251,255,.72)]">*Urgent projects: message anytime.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 flex flex-col">
+            <div class="glass rounded-3xl p-6 md:p-7 reveal" data-reveal>
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                </div>
+              </div>
+             <div class="flex flex-col justify-between min-h-[260px]">
+
+  <!-- Heading -->
+  <div>
+    <div class="text-xs text-[rgba(246,251,255,.72)]">Stay connected</div>
+    <div class="mt-1 text-2xl font-extrabold">Let’s Connect</div>
+    <div class="mt-2 text-sm text-[rgba(246,251,255,.75)]">
+      Follow AFX Studio or download our profile.
+    </div>
+  </div>
+
+  <!-- Links -->
+  <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+   
+    <!-- YouTube -->
+    <a href="aboutus.html">
+      
+
+      
+
+      
+    </a>
+ <!-- Instagram -->
+    <a href="https://www.instagram.com/afx_studio_?igsh=ODJpejV0ZG9pYzZ0"
+      class="group flex items-center gap-3 p-4 rounded-2xl bg-white/5 
+      hover:bg-[var(--accent)] hover:text-black transition-all duration-300">
+
+      <span
+        class="w-9 h-9 rounded-full bg-[var(--accent)]/20 grid place-items-center
+        group-hover:bg-black/10 transition">
+        📸
+      </span>
+
+      <div>
+        <div class="font-semibold">Instagram</div>
+        <div class="text-xs opacity-70 group-hover:opacity-100">@afx_studio_</div>
+      </div>
+    </a>
+    <!-- LinkedIn -->
+    <a href="https://www.facebook.com/profile.php?id=61566051816959"
+      class="group flex items-center gap-3 p-4 rounded-2xl bg-white/5 
+      hover:bg-[var(--accent)] hover:text-black transition-all duration-300">
+
+      <span
+        class="w-9 h-9 rounded-full bg-[var(--accent)]/20 grid place-items-center
+        group-hover:bg-black/10 transition">
+        💼
+      </span>
+
+      <div>
+        <div class="font-semibold">facebook</div>
+        <div class="text-xs opacity-70 group-hover:opacity-100">AFX Studio</div>
+      </div>
+    </a>
+
+    <!-- Download -->
+    <a href="aboutus.html" 
+      class="group flex items-center gap-3 p-4 rounded-2xl 
+      bg-[var(--accent)] text-black font-semibold 
+      hover:bg-yellow-400 transition-all duration-300">
+
+      <span
+        class="w-9 h-9 rounded-full bg-black/10 grid place-items-center
+        group-hover:scale-110 transition">
+        ⬇️
+      </span>
+
+      <div>
+        <div>Explore</div>
+        <div class="text-xs opacity-70">Company Profile</div>
+      </div>
+    </a>
+
+  </div>
+</div>
+                
+                
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 glass rounded-3xl p-6 reveal delay-1 w-full" data-reveal>
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]">Final step</div>
+                  <div class="mt-1 text-2xl font-extrabold">Let’s make your brand look premium</div>
+                  <div class="mt-2 text-sm text-[rgba(246,251,255,.78)]">Simple, structured, professional — AFX Studio.</div>
+                </div>
+                <a class="btn btn-primary inline-flex justify-center" href="#inquiry">Start Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="mt-10 text-center text-xs text-[rgba(246,251,255,.60)]">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2">
+            <span>© <span id="year"></span> AFX Studio</span>
+            <span class="hidden sm:inline">•</span>
+            <span> All rights reserved.</span>
+            <span> Creative Design | Video Editing | Digital Solutions</span>
+<span>
+Privacy Policy | Terms & Conditions</span>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Work modal -->
+  <div id="workModal" class="fixed inset-0 hidden items-center justify-center p-4 z-[60]">
+    <div class="absolute inset-0 modal-backdrop" data-close></div>
+    <div class="relative w-full max-w-2xl glass rounded-3xl p-6 md:p-7 ring-anim">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs text-[rgba(246,251,255,.72)]" id="modalSubtitle">Showcase</div>
+          <div class="mt-1 text-2xl font-extrabold" id="modalTitle">Title</div>
+        </div>
+        <button class="btn btn-ghost" data-close aria-label="Close">Close</button>
+      </div>
+      <div id="modalArt" class="mt-5 h-56 rounded-3xl border border-white/10"></div>
+      <p id="modalDesc" class="mt-5 text-sm text-[rgba(246,251,255,.78)]">Description</p>
+      <div id="modalTags" class="mt-4 flex flex-wrap gap-2 text-xs"></div>
+      <div class="mt-6 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between">
+        <div class="text-xs text-[rgba(246,251,255,.60)]">Replace this demo with your real portfolio images.</div>
+        <a href="#inquiry" class="btn btn-primary inline-flex justify-center" id="modalCta">Request Similar</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-[70] w-[min(520px,calc(100vw-2rem))]">
+    <div id="toast" class="toast glass rounded-2xl px-4 py-3 border border-white/10">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="font-bold" id="toastTitle">Done</div>
+          <div class="text-sm text-[rgba(246,251,255,.72)]" id="toastMsg">Message</div>
+        </div>
+        <button class="btn btn-ghost" id="toastClose">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <button id="toTop" class="fixed bottom-5 right-5 z-[65] hidden btn btn-primary" aria-label="Scroll to top">Top</button>
+
+  <script>
+    // ----- Helpers
+    const $ = (q, el=document) => el.querySelector(q);
+    const $$ = (q, el=document) => [...el.querySelectorAll(q)];
+
+    // Year
+    $('#year').textContent = new Date().getFullYear();
+
+    // Mobile menu
+    const menuBtn = $('#menuBtn');
+    const mobileMenu = $('#mobileMenu');
+    menuBtn?.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-label', mobileMenu.classList.contains('hidden') ? 'Open menu' : 'Close menu');
+    });
+    $$('.navlink').forEach(a => a.addEventListener('click', () => mobileMenu?.classList.add('hidden')));
+
+    // Active nav highlighting
+    const sections = ['home','about','services','work','designer','inquiry','contact']
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    const setActive = (id) => {
+      $$('.navlink').forEach(a => {
+        const href = a.getAttribute('href') || '';
+        const active = href === `#${id}`;
+        a.classList.toggle('bg-white/5', active);
+        a.classList.toggle('text-white', active);
+        a.classList.toggle('font-semibold', active);
+      });
+    };
+
+    const navObs = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a,b)=> b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setActive(visible.target.id);
+    }, { root: null, threshold: [0.25, 0.5, 0.75] });
+
+    sections.forEach(s => navObs.observe(s));
+
+    // Reveal on scroll
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.18 });
+
+    $$('[data-reveal]').forEach(el => {
+      // hero had one already visible; keep as-is
+      if (!el.classList.contains('is-in')) el.classList.add('reveal');
+      revealObs.observe(el);
+    });
+
+    // 3D tilt
+    const tiltEls = $$('[data-tilt]');
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+    function attachTilt(el){
+      const maxDeg = 10;
+      const maxZ = 10;
+      let rect;
+
+      const onEnter = () => { rect = el.getBoundingClientRect(); el.style.transition = 'transform 150ms ease'; };
+      const onMove = (ev) => {
+        if (!rect) rect = el.getBoundingClientRect();
+        const x = ev.clientX - rect.left;
+        const y = ev.clientY - rect.top;
+        const px = (x / rect.width) * 2 - 1;
+        const py = (y / rect.height) * 2 - 1;
+        const rx = clamp(-py * maxDeg, -maxDeg, maxDeg);
+        const ry = clamp(px * maxDeg, -maxDeg, maxDeg);
+        const tz = maxZ;
+        el.style.transition = 'transform 40ms ease';
+        el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(${tz}px)`;
+      };
+      const onLeave = () => {
+        el.style.transition = 'transform 400ms cubic-bezier(.2,.8,.2,1)';
+        el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+        rect = null;
+      };
+
+      el.addEventListener('mouseenter', onEnter);
+      el.addEventListener('mousemove', onMove);
+      el.addEventListener('mouseleave', onLeave);
+
+      // touch fallback
+      el.addEventListener('touchstart', () => { el.style.transform = 'perspective(900px) rotateX(-6deg) rotateY(8deg) translateZ(6px)'; }, {passive:true});
+      el.addEventListener('touchend', () => { el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0px)'; }, {passive:true});
+    }
+
+    tiltEls.forEach(attachTilt);
+
+    // Work modal
+    const modal = $('#workModal');
+    const modalTitle = $('#modalTitle');
+    const modalDesc = $('#modalDesc');
+    const modalTags = $('#modalTags');
+    const modalArt = $('#modalArt');
+
+    const openModal = (card) => {
+      const title = card.dataset.title || 'Work';
+      const desc = card.dataset.desc || '';
+      const tags = (card.dataset.tags || '').split(',').map(s => s.trim()).filter(Boolean);
+      const theme = card.dataset.color || 'blue';
+
+      modalTitle.textContent = title;
+      modalDesc.textContent = desc;
+      modalTags.innerHTML = tags.map(t => `<span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[rgba(246,251,255,.78)]">${t}</span>`).join('');
+      modalArt.className = 'mt-5 h-56 rounded-3xl border border-white/10';
+      modalArt.style.background = theme === 'accent'
+        ? 'radial-gradient(circle at 30% 20%, rgba(247,198,0,.30), transparent 55%), radial-gradient(circle at 75% 80%, rgba(95,208,255,.18), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03))'
+        : 'radial-gradient(circle at 30% 20%, rgba(95,208,255,.25), transparent 55%), radial-gradient(circle at 75% 80%, rgba(247,198,0,.16), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03))';
+
+
+      // focus
+      setTimeout(() => $('[data-close]', modal)?.focus?.(), 0);
+    };
+
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    };
+
+    $$('.work-card').forEach(card => card.addEventListener('click', () => openModal(card)));
+    $$('[data-close]', modal).forEach(el => el.addEventListener('click', closeModal));
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+
+    // Toast
+    const toast = $('#toast');
+    const toastTitle = $('#toastTitle');
+    const toastMsg = $('#toastMsg');
+    const toastClose = $('#toastClose');
+    let toastTimer;
+
+    function showToast(title, msg){
+      toastTitle.textContent = title;
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+    }
+    toastClose.addEventListener('click', () => toast.classList.remove('show'));
+
+    // Copy buttons
+    $$('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const val = btn.getAttribute('data-copy');
+        try{
+          await navigator.clipboard.writeText(val);
+          showToast('Copied', `${val} copied to clipboard.`);
+        }catch{
+          showToast('Copy failed', 'Your browser blocked clipboard access.');
+        }
+      });
+    });
+
+    // Prefill demo
+    $('#prefillBtn').addEventListener('click', () => {
+      $('#name').value = 'Aapka Naam';
+      $('#brand').value = 'AFX Client Brand';
+      $('#email').value = 'client@email.com';
+      $('#phone').value = '+91 90000 00000';
+      $('#service').value = 'Complete Studio Package';
+      $('#message').value = 'Hello, I need editing services. Please let me know how to proceed.';
+      showToast('Auto‑filled', 'Demo values form me fill kar diye gaye.');
+    });
+
+    // Form submit
+    $('#inquiryForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // basic validation
+      const required = ['name','email','phone','service','message'];
+      const missing = required.filter(k => !String(data[k] || '').trim());
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(data.email||''));
+
+      if (missing.length){
+        showToast('Please complete the form', 'Required fields missing: ' + missing.join(', '));
+        return;
+      }
+      if (!emailOk){
+        showToast('Invalid email', 'Please enter a valid email address.');
+        return;
+      }
+
+      // Save a tiny inquiry log
+      try{
+        const key = 'afx_inquiries';
+        const prev = JSON.parse(localStorage.getItem(key) || '[]');
+        prev.unshift({ ...data, ts: Date.now() });
+        localStorage.setItem(key, JSON.stringify(prev.slice(0, 20)));
+      }catch{}
+
+      showToast('Inquiry sent (demo)', `Thanks ${data.name}! We’ll contact you soon about “${data.service}”.`);
+      form.reset();
+    });
+
+    // Scroll to top
+    const toTop = $('#toTop');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY || document.documentElement.scrollTop;
+      toTop.classList.toggle('hidden', y < 800);
+    }, {passive:true});
+    toTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Animated particle background (lightweight)
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
+    let W=0, H=0;
+
+    function resize(){
+      W = Math.floor(window.innerWidth);
+      H = Math.floor(window.innerHeight);
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    window.addEventListener('resize', resize, {passive:true});
+    resize();
+
+    const rand = (a,b)=> a + Math.random()*(b-a);
+    const particles = [];
+    const count = Math.round(Math.min(92, Math.max(55, W/18)));
+
+    for (let i=0;i<count;i++){
+      particles.push({
+        x: rand(0,W), y: rand(0,H),
+        vx: rand(-0.28,0.28), vy: rand(-0.22,0.22),
+        r: rand(1.0, 2.2),
+        c: Math.random() < .33 ? 'accent' : 'white'
+      });
+    }
+
+    let mouse = {x: W*0.5, y: H*0.35, active:false};
+    window.addEventListener('mousemove', (e)=>{ mouse.x=e.clientX; mouse.y=e.clientY; mouse.active=true; }, {passive:true});
+    window.addEventListener('mouseleave', ()=>{ mouse.active=false; }, {passive:true});
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+
+      // soft vignette
+      const g = ctx.createRadialGradient(W*0.5,H*0.3, 50, W*0.5,H*0.5, Math.max(W,H));
+      g.addColorStop(0, 'rgba(247,198,0,0.05)');
+      g.addColorStop(0.35, 'rgba(95,208,255,0.04)');
+      g.addColorStop(1, 'rgba(0,0,0,0.28)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,W,H);
+
+      // update + draw particles
+      for (const p of particles){
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -20) p.x = W+20;
+        if (p.x > W+20) p.x = -20;
+        if (p.y < -20) p.y = H+20;
+        if (p.y > H+20) p.y = -20;
+
+        // slight attraction to mouse
+        if (mouse.active){
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const d2 = dx*dx + dy*dy;
+          if (d2 < 180*180){
+            p.x += dx * 0.00025;
+            p.y += dy * 0.00025;
+          }
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = p.c === 'accent' ? 'rgba(247,198,0,0.75)' : 'rgba(246,251,255,0.65)';
+        ctx.fill();
+      }
+
+      // connections
+      for (let i=0;i<particles.length;i++){
+        const a = particles[i];
+        for (let j=i+1;j<particles.length;j++){
+          const b = particles[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dist = Math.hypot(dx,dy);
+          if (dist < 130){
+            const alpha = (1 - dist/130) * 0.22;
+            ctx.strokeStyle = `rgba(246,251,255,${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x,a.y);
+            ctx.lineTo(b.x,b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+  <script>
+document.querySelectorAll('.glass').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+
+    card.style.setProperty('--x', `${x}px`);
+    card.style.setProperty('--y', `${y}px`);
+
+    const rx = -(y - r.height / 2) / 12;
+    const ry = (x - r.width / 2) / 12;
+
+    card.style.transform =
+      `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(100px)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform =
+      'rotateX(0) rotateY(0) translateZ(0)';
+  });
+});
+</script>
+</body>
+</html>
