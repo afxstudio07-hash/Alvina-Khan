@@ -285,6 +285,75 @@
 .glass > * {
   transform: translateZ(30px);
 }
+
+    /* 📱 MOBILE PERFORMANCE RESCUE */
+@media (max-width: 768px) {
+
+  /* ❌ Floating grid animation OFF */
+  .grid-overlay {
+    animation: none !important;
+    opacity: .08; /* halka rakhna */
+  }
+
+  /* ❌ Noise blend mode heavy */
+  .noise {
+    display: none !important;
+  }
+
+  /* ❌ Glass blur killer */
+  .glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(20,20,20,.85) !important;
+  }
+
+  /* ❌ Reveal animations */
+  .reveal,
+  .reveal.is-in {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  /* ❌ 3D tilt */
+  .tilt,
+  .tilt .tilt-pop {
+    transform: none !important;
+    transform-style: flat !important;
+    will-change: auto !important;
+  }
+
+  /* ❌ Animated gradient border */
+  .ring-anim:before {
+    animation: none !important;
+    filter: none !important;
+    opacity: .3;
+  }
+
+  /* ❌ FULL 3D cube murder (biggest lag source) */
+  .cube {
+    animation: none !important;
+    transform: none !important;
+  }
+  .cube .face {
+    animation: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ❌ Button heavy shadows */
+  .btn-primary,
+  .btn-primary:hover {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  /* ❌ Modal blur */
+  .modal-backdrop {
+    backdrop-filter: none !important;
+  }
+
+}
   </style>
 </head>
 
@@ -2064,4 +2133,5 @@ document.querySelectorAll('.glass').forEach(card => {
 });
 </script>
 </body>
+
 </html>
