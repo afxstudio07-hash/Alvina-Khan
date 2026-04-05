@@ -2436,5 +2436,96 @@ document.querySelectorAll('.glass').forEach(card => {
 
 });
 </script>
+  <!-- ===== MOBILE PERFORMANCE OPTIMIZER START ===== -->
+
+<style>
+/* Smooth rendering */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* GPU acceleration */
+* {
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== MOBILE OPTIMIZATION ===== */
+@media (max-width: 1024px) {
+
+  /* Disable heavy animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Hide heavy 3D elements */
+  canvas,
+  .threejs,
+  .heavy-3d,
+  .parallax,
+  .background-video,
+  video {
+    display: none !important;
+  }
+
+  /* Reduce shadows & blur */
+  * {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+  }
+
+  section {
+    padding: 40px 20px !important;
+  }
+
+  h1 { font-size: 26px !important; }
+  h2 { font-size: 20px !important; }
+  p  { font-size: 15px !important; }
+
+}
+</style>
+
+<script>
+(function() {
+
+  function optimizeForMobile() {
+    if (window.innerWidth <= 1024) {
+
+      console.log("Mobile optimization activated");
+
+      // Remove all canvas (Three.js etc.)
+      document.querySelectorAll("canvas").forEach(el => el.remove());
+
+      // Stop all videos
+      document.querySelectorAll("video").forEach(video => {
+        video.pause();
+        video.removeAttribute("autoplay");
+        video.style.display = "none";
+      });
+
+      // Disable scroll animations (AOS etc.)
+      if (typeof AOS !== "undefined") {
+        AOS.init({ disable: true });
+      }
+
+      // Reduce heavy scroll listeners
+      window.onscroll = null;
+    }
+  }
+
+  window.addEventListener("load", optimizeForMobile);
+  window.addEventListener("resize", optimizeForMobile);
+
+})();
+</script>
+
+<!-- ===== MOBILE PERFORMANCE OPTIMIZER END ===== -->
 </body>
 </html>
