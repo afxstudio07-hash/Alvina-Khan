@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asad Khan | Professional Video Editor & Graphic Designer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@300;400;600;800&family=Syncopate:wght@700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- ThreeJS & GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #FFD700;
+            --primary-dark: #FFC000;
+            --bg-dark: #0a0a0a;
+            --card-bg: rgba(25, 25, 25, 0.8);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .font-sync { font-family: 'Syncopate', sans-serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        /* Glitch Effect for Loader */
+        .glitch {
+            position: relative;
+            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                        -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            animation: glitch 500ms infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            14% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+        }
+
+        /* CSS 3D Spinner styles */
+        .spinner-perspective {
+            perspective: 2000px;
+            perspective-origin: 50% 50%;
+        }
+
+        .spinner-carousel {
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+
+        .spinner-item {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 280px;
+            height: 380px;
+            margin-left: -140px;
+            margin-top: -190px;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .spinner-item:hover {
+            transform: translateZ(50px) !important;
+            filter: brightness(1.2);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-glow {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.1s ease-out;
+        }
+
+        /* Parallax Image containers */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        /* Neon Glows */
+        .glow-gold {
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .text-neon {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-neutral-950 text-white font-sans selection:bg-yellow-400 selection:text-black">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <!-- Preloader Screen -->
+    <div id="loader" class="fixed inset-0 bg-yellow-400 z-[9999] flex flex-col justify-center items-center font-black overflow-hidden h-screen w-screen">
+        <div class="absolute inset-0 bg-black opacity-10 flex flex-wrap pointer-events-none">
+            <!-- Grid lines background -->
+            <div class="w-1/12 h-1/12 border border-black opacity-20"></div>
+        </div>
+        <div id="loader-content" class="relative flex flex-col items-center">
+            <h1 id="loader-welcome" class="text-7xl md:text-[12rem] font-sync text-black font-black tracking-tighter leading-none mb-4">
+                WELCOME
+            </h1>
+            <h2 id="loader-name" class="text-6xl md:text-[10rem] font-sync text-black font-black tracking-tighter leading-none hidden glitch">
+                ASAD KHAN
+            </h2>
+            <div id="loader-bar-wrap" class="w-64 h-2 bg-black/20 rounded-full mt-12 relative overflow-hidden">
+                <div id="loader-bar" class="absolute top-0 left-0 h-full bg-black w-0"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-5 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-md">
+        <div class="text-3xl font-sync text-yellow-400 font-bold tracking-widest">AK.</div>
+        <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider">
+            <a href="#home" class="hover:text-yellow-400 transition-colors duration-300">HOME</a>
+            <a href="#services" class="hover:text-yellow-400 transition-colors duration-300">SERVICES</a>
+            <a href="#work" class="hover:text-yellow-400 transition-colors duration-300">WORK</a>
+            <a href="#exp" class="hover:text-yellow-400 transition-colors duration-300">EXPERIENCE</a>
+            <a href="#contact" class="hover:text-yellow-400 transition-colors duration-300">CONTACT</a>
+        </div>
+        <div>
+            <a href="#contact" class="bg-yellow-400 text-black px-6 py-2 font-bold text-sm tracking-wider hover:bg-white transition-all duration-300 rounded-sm">HIRE ME</a>
+        </div>
+    </nav>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="viewport" class="relative w-full overflow-hidden">
+
+        <!-- Hero Section -->
+        <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+            <!-- Three.js Canvas Container -->
+            <div id="hero-canvas" class="absolute inset-0 z-0"></div>
+            
+            <!-- Dark Overlay and vignette -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-neutral-950 z-1 pointer-events-none"></div>
+
+            <!-- Content -->
+            <div class="container mx-auto px-6 relative z-10 flex flex-col items-center justify-center h-full text-center">
+                <div class="flex flex-col items-center">
+                    <span class="bg-yellow-400/10 text-yellow-400 border border-yellow-400/30 font-semibold px-4 py-1 tracking-widest text-xs mb-6 rounded-full animate-pulse">
+                        TOP RATED VIDEO EDITOR & DESIGNER
+                    </span>
+                    
+                    <h1 class="text-6xl md:text-9xl font-black font-sync tracking-tighter text-white leading-none mb-4" style="perspective: 1000px;">
+                        <span class="inline-block text-reveal text-yellow-400 text-neon">ASAD</span> 
+                        <span class="inline-block text-reveal">KHAN</span>
+                    </h1>
+
+                    <h3 class="text-xl md:text-3xl font-light max-w-2xl tracking-wide text-neutral-300 mb-8">
+                        Crafting Cinematic <span class="text-yellow-400 font-bold">Visual Stories</span> & Eye-Catching <span class="text-yellow-400 font-bold">Graphic Designs</span>
+                    </h3>
+
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                        <a href="#work" class="group relative bg-yellow-400 text-neutral-950 font-black px-10 py-4 tracking-wider text-sm transition-all duration-500 overflow-hidden rounded-md glow-gold">
+                            <span class="relative z-10">VIEW MY WORK <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i></span>
+                            <div class="absolute top-0 left-0 w-0 h-full bg-white transition-all duration-300 group-hover:w-full z-0"></div>
+                        </a>
+                        <a href="#contact" class="group border-2 border-white/50 text-white font-bold px-10 py-4 tracking-wider text-sm transition-all duration-300 rounded-md hover:border-yellow-400 hover:text-yellow-400">
+                            LET'S COLLABORATE
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Floating Mouse Indicator -->
+                <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                    <span class="text-xs text-neutral-400 tracking-widest mb-2">SCROLL TO EXPLORE</span>
+                    <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
+                        <div class="w-1 h-3 bg-yellow-400 rounded-full animate-bounce"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services 3D Spinner Section -->
+        <section id="services" class="relative py-32 bg-neutral-950 overflow-hidden">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-400/5 rounded-full filter blur-[100px] pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-yellow-400/5 rounded-full filter blur-[100px] pointer-events-none"></div>
+
+            <div class="container mx-auto px-6 relative z-10 text-center mb-16">
+                <span class="text-yellow-400 font-bold tracking-widest text-sm font-sync">WHAT I DO</span>
+                <h2 class="text-5xl md:text-7xl font-sync font-black text-white mt-4 tracking-tight">MY 3D SERVICES</h2>
+                <p class="text-neutral-400 max-w-xl mx-auto mt-4">Drag or swipe to rotate the carousel and explore my expert skillsets as a video editor and designer.</p>
+            </div>
+
+            <div class="relative h-[600px] flex items-center justify-center spinner-perspective select-none">
+                <!-- Navigation controls for fallback/desktop accessibility -->
+                <div class="absolute top-1/2 left-4 md:left-20 transform -translate-y-1/2 z-20">
+                    <button id="prev-btn" class="w-14 h-14 rounded-full border border-yellow-400/40 text-yellow-400 flex items-center justify-center hover:bg-yellow-400 hover:text-black transition-all duration-300 backdrop-blur-md">
+                        <i class="fa-solid fa-chevron-left text-xl"></i>
+                    </button>
+                </div>
+                <div class="absolute top-1/2 right-4 md:right-20 transform -translate-y-1/2 z-20">
+                    <button id="next-btn" class="w-14 h-14 rounded-full border border-yellow-400/40 text-yellow-400 flex items-center justify-center hover:bg-yellow-400 hover:text-black transition-all duration-300 backdrop-blur-md">
+                        <i class="fa-solid fa-chevron-right text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Actual 3D Spinner -->
+                <div id="spinner-carousel" class="spinner-carousel relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing">
+                    
+                    <!-- Card 1 -->
+                    <div class="spinner-item glass-card p-8 rounded-2xl flex flex-col justify-between border-t-4 border-yellow-400">
+                        <div>
+                            <div class="w-16 h-16 bg-yellow-400 text-black rounded-xl flex items-center justify-center text-3xl mb-6 shadow-lg shadow-yellow-400/20">
+                                <i class="fa-solid fa-film"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Cinematic Video Editing</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">High-end video post-production for films, documentaries, commercials, and YouTube. Slick storytelling at its best.</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex items-center text-yellow-400 font-bold text-sm">
+                            <span>EXPLORE SERVICE</span> <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="spinner-item glass-card p-8 rounded-2xl flex flex-col justify-between border-t-4 border-white">
+                        <div>
+                            <div class="w-16 h-16 bg-white text-black rounded-xl flex items-center justify-center text-3xl mb-6">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">VFX & Visual Effects</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">CGI, compositing, green screen removal, tracking, and advanced visual alterations to bring imagination to reality.</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex items-center text-white font-bold text-sm">
+                            <span>EXPLORE SERVICE</span> <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="spinner-item glass-card p-8 rounded-2xl flex flex-col justify-between border-t-4 border-yellow-400">
+                        <div>
+                            <div class="w-16 h-16 bg-yellow-400 text-black rounded-xl flex items-center justify-center text-3xl mb-6 shadow-lg shadow-yellow-400/20">
+                                <i class="fa-solid fa-palette"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Color Grading & LUTs</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">Professional color matching using DaVinci Resolve. Giving your footage Hollywood mood and cinematic palettes.</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex items-center text-yellow-400 font-bold text-sm">
+                            <span>EXPLORE SERVICE</span> <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="spinner-item glass-card p-8 rounded-2xl flex flex-col justify-between border-t-4 border-white">
+                        <div>
+                            <div class="w-16 h-16 bg-white text-black rounded-xl flex items-center justify-center text-3xl mb-6">
+                                <i class="fa-solid fa-cubes"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">3D Animation & Title</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">Motion graphics, text reveals, lower-thirds, and complex 3D text animations in After Effects and Cinema4D.</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex items-center text-white font-bold text-sm">
+                            <span>EXPLORE SERVICE</span> <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="spinner-item glass-card p-8 rounded-2xl flex flex-col justify-between border-t-4 border-yellow-400">
+                        <div>
+                            <div class="w-16 h-16 bg-yellow-400 text-black rounded-xl flex items-center justify-center text-3xl mb-6 shadow-lg shadow-yellow-400/20">
+                                <i class="fa-solid fa-photo-film"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Social Reels & TikTok</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">Highly engaging, fast-paced edits for Instagram Reels, YouTube Shorts, and TikTok with trendy subtitles and effects.</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex items-center text-yellow-400 font-bold text-sm">
+                            <span>EXPLORE SERVICE</span> <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div class="spinner-item glass-card p-8 rounded-2xl flex flex-col justify-between border-t-4 border-white">
+                        <div>
+                            <div class="w-16 h-16 bg-white text-black rounded-xl flex items-center justify-center text-3xl mb-6">
+                                <i class="fa-solid fa-vector-square"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Graphic & UI Design</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">Modern visual branding, logo creation, social media aesthetics, thumbnails that convert, and typography art.</p>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-4 flex items-center text-white font-bold text-sm">
+                            <span>EXPLORE SERVICE</span> <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== COMPLETE PORTFOLIO SECTION ===== -->
+<section id="work" class="relative py-16 md:py-24 overflow-hidden">
+
+    <div class="container mx-auto px-4 md:px-6">
+
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6">
+            <div>
+                <span class="text-yellow-400 font-bold tracking-widest text-xs md:text-sm">PORTFOLIO</span>
+                <h2 class="text-3xl sm:text-5xl md:text-7xl font-black text-white mt-3">
+                    CRAFTED WORK
+                </h2>
+            </div>
+
+            <p class="text-neutral-400 max-w-sm text-sm md:text-base">
+                High-end creative work blending visuals, storytelling & performance design.
+            </p>
+        </div>
+
+        <!-- ===== MAIN GRID (9 ITEMS) ===== -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+            <!-- REPEATABLE CARD -->
+            <!-- 1 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_1" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">ADVERTISEMENT</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Automobile Ad</h3>
+                </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_2">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">SOCIAL</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Instagram Campaign</h3>
+                </div>
+            </div>
+
+            <!-- 3 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_3">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">VFX</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Sci-Fi Edit</h3>
+                </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_4">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">BRANDING</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Brand Kit</h3>
+                </div>
+            </div>
+
+            <!-- 5 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_5">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">POSTER</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Event Poster</h3>
+                </div>
+            </div>
+
+            <!-- 6 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_6">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">REELS</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Short Edit</h3>
+                </div>
+            </div>
+
+            <!-- 7 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_7">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">YOUTUBE</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Thumbnail</h3>
+                </div>
+            </div>
+
+            <!-- 8 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_8">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">DOCU</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Travel Story</h3>
+                </div>
+            </div>
+
+            <!-- 9 -->
+            <div class="group relative rounded-2xl overflow-hidden aspect-[4/5]">
+                <img src="YOUR_IMAGE_9">
+                <div class="absolute bottom-4 left-4">
+                    <span class="text-yellow-400 text-xs bg-black/60 px-2 py-1 rounded-full">ADS</span>
+                    <h3 class="text-white text-lg md:text-2xl font-bold mt-2">Product Promo</h3>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== PAMPHLETS (12 ITEMS) ===== -->
+        <div class="mt-20 md:mt-28">
+
+            <h3 class="text-3xl md:text-5xl font-black text-white mb-8">
+                Posters & Pamphlets
+            </h3>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+
+                <!-- 12 ITEMS -->
+                <!-- Repeat -->
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P1" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P2" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P3" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P4" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P5" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P6" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P7" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P8" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P9" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P10" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P11" class="w-full h-full object-cover hover:scale-110 transition"></div>
+                <div class="group rounded-xl overflow-hidden aspect-[22/28]"><img src="P12" class="w-full h-full object-cover hover:scale-110 transition"></div>
+
+            </div>
+        </div>
+
+        <!-- ===== VIDEO STRIP (5 ITEMS) ===== -->
+        <div class="mt-20 md:mt-28">
+
+            <h3 class="text-3xl md:text-5xl font-black text-white mb-8">
+                Latest Video Edits
+            </h3>
+
+            <div class="flex space-x-4 overflow-x-auto pb-4">
+
+                <div class="min-w-[280px] relative rounded-xl overflow-hidden">
+                    <img src="V1" class="w-full h-[200px] object-cover">
+                </div>
+
+                <div class="min-w-[280px] relative rounded-xl overflow-hidden">
+                    <img src="V2" class="w-full h-[200px] object-cover">
+                </div>
+
+                <div class="min-w-[280px] relative rounded-xl overflow-hidden">
+                    <img src="V3" class="w-full h-[200px] object-cover">
+                </div>
+
+                <div class="min-w-[280px] relative rounded-xl overflow-hidden">
+                    <img src="V4" class="w-full h-[200px] object-cover">
+                </div>
+
+                <div class="min-w-[280px] relative rounded-xl overflow-hidden">
+                    <img src="V5" class="w-full h-[200px] object-cover">
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+        
+        <!-- Experience Section -->
+<section id="exp" class="relative py-24 bg-neutral-950 overflow-hidden">
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="flex flex-col items-center mb-16">
+            <span class="text-yellow-400 font-bold tracking-widest text-sm font-sync">MY ROADMAP</span>
+            <h2 class="text-5xl md:text-7xl font-sync font-black text-white mt-4 tracking-tight text-center">EXPERIENCE</h2>
+        </div>
+
+        <div class="relative border-l-2 border-neutral-800 max-w-4xl mx-auto pl-10 space-y-16">
+
+            <!-- Milestone 1 -->
+            <div class="relative">
+                <div class="absolute -left-[51px] top-0 w-10 h-10 bg-yellow-400 text-black rounded-full flex items-center justify-center font-bold text-xl border-4 border-neutral-950">
+                    1
+                </div>
+                <div>
+                    <span class="text-yellow-400 text-xs font-bold font-sync tracking-wider mb-2 inline-block">2025 - PRESENT</span>
+                    <h3 class="text-3xl font-bold text-white mb-2">Founder & Graphic Designer </h3>
+                    <h4 class="text-lg text-neutral-300 mb-4">AFX Studio</h4>
+                    <p class="text-neutral-400 leading-relaxed">
+                        Founded and leading AFX Studio, managing end-to-end creative projects including video editing, graphic design, and branding. Overseeing client projects, creative direction, and building a strong visual identity across digital platforms.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Milestone 2 -->
+            <div class="relative">
+                <div class="absolute -left-[51px] top-0 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl border-4 border-neutral-950">
+                    2
+                </div>
+                <div>
+                    <span class="text-neutral-400 text-xs font-bold font-sync tracking-wider mb-2 inline-block">2023 - 2025</span>
+                    <h3 class="text-3xl font-bold text-white mb-2">Graphic Designer, Video Editor & Desk Incharge</h3>
+                    <h4 class="text-lg text-neutral-300 mb-4">Meem TV</h4>
+                    <p class="text-neutral-400 leading-relaxed">
+                        Managed graphic design and video editing tasks along with handling desk operations. Ensured smooth content workflow, supervised production tasks, and maintained quality output for broadcast media.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Milestone 3 -->
+            <div class="relative">
+                <div class="absolute -left-[51px] top-0 w-10 h-10 bg-yellow-400 text-black rounded-full flex items-center justify-center font-bold text-xl border-4 border-neutral-950">
+                    3
+                </div>
+                <div>
+                    <span class="text-yellow-400 text-xs font-bold font-sync tracking-wider mb-2 inline-block">2021 - 2023</span>
+                    <h3 class="text-3xl font-bold text-white mb-2">Graphic Designer & Video Editor</h3>
+                    <h4 class="text-lg text-neutral-300 mb-4">T TV</h4>
+                    <p class="text-neutral-400 leading-relaxed">
+                        Worked on news graphics, video editing, and broadcast visuals. Delivered high-quality content under tight deadlines while maintaining visual consistency for news production.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Milestone 4 -->
+            <div class="relative">
+                <div class="absolute -left-[51px] top-0 w-10 h-10 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl border-4 border-neutral-950">
+                    4
+                </div>
+                <div>
+                    <span class="text-neutral-400 text-xs font-bold font-sync tracking-wider mb-2 inline-block">2021</span>
+                    <h3 class="text-3xl font-bold text-white mb-2">Video Editor & Graphic Designer</h3>
+                    <h4 class="text-lg text-neutral-300 mb-4">Sach News</h4>
+                    <p class="text-neutral-400 leading-relaxed">
+                        Started professional journey in media industry by handling video editing and graphic design for news content. Built strong foundation in visual storytelling and fast-paced editing workflows.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+        <!-- Contact & Footer Section -->
+        <section id="contact" class="relative py-24 bg-neutral-900 overflow-hidden">
+            <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-400/5 rounded-full filter blur-[100px] pointer-events-none"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span class="text-yellow-400 font-bold tracking-widest text-sm font-sync">GET IN TOUCH</span>
+                        <h2 class="text-5xl md:text-7xl font-sync font-black text-white mt-4 tracking-tight">LET'S BUILD SOMETHING GREAT</h2>
+                        <p class="text-neutral-400 mt-6 max-w-md leading-relaxed">Ready to take your project to the next level? Reach out for inquiries, collaborations, or custom quote.</p>
+
+                        <div class="mt-12 space-y-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-neutral-800 rounded-lg flex items-center justify-center text-yellow-400 text-xl">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-neutral-500 block">EMAIL ME</span>
+                                    <a href="mailto:work.asadkhan@example.com" class="text-white font-semibold text-lg hover:text-yellow-400 transition-colors">khan6309679672@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-neutral-800 rounded-lg flex items-center justify-center text-yellow-400 text-xl">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-neutral-500 block">CALL NOW</span>
+                                    <a href="tel:+91 9381073949" class="text-white font-semibold text-lg hover:text-yellow-400 transition-colors">+91 9381073943</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-12">
+    <h3 class="text-sm font-sync font-bold tracking-widest text-white mb-4">
+        FOLLOW SOCIALS
+    </h3>
+
+    <div class="flex space-x-4">
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/mr._khann_7_?igsh=MWNkd29iYzl3YW1iNg==" 
+           target="_blank"
+           class="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-white hover:bg-yellow-400 hover:text-black hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300">
+            <i class="fa-brands fa-instagram text-xl"></i>
+        </a>
+
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/YOUR_USERNAME" 
+           target="_blank"
+           class="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-white hover:bg-yellow-400 hover:text-black hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300">
+            <i class="fa-brands fa-facebook-f text-xl"></i>
+        </a>
+
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com/in/YOUR_USERNAME" 
+           target="_blank"
+           class="w-12 h-12 rounded-full bg-neutral-800 flex items-center justify-center text-white hover:bg-yellow-400 hover:text-black hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300">
+            <i class="fa-brands fa-linkedin-in text-xl"></i>
+        </a>
+
+    </div>
+</div>
+                    </div>
+
+                    <!-- Contact Form Card -->
+                    <div class="glass-card p-10 rounded-2xl border border-neutral-800">
+                        <form action="#" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="text-xs font-bold text-neutral-400 tracking-wider mb-2 block">YOUR NAME</label>
+                                    <input type="text" required class="w-full bg-neutral-800 border-b border-neutral-700 text-white p-3 rounded-md focus:outline-none focus:border-yellow-400 transition-colors" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-neutral-400 tracking-wider mb-2 block">EMAIL ADDRESS</label>
+                                    <input type="email" required class="w-full bg-neutral-800 border-b border-neutral-700 text-white p-3 rounded-md focus:outline-none focus:border-yellow-400 transition-colors" placeholder="john@example.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-neutral-400 tracking-wider mb-2 block">PROJECT TYPE</label>
+                                <select class="w-full bg-neutral-800 border-b border-neutral-700 text-white p-3 rounded-md focus:outline-none focus:border-yellow-400 transition-colors">
+                                    <option value="video">Video Editing / Reels</option>
+                                    <option value="graphic">Graphic Design / Identity</option>
+                                    <option value="vfx">VFX & Compositing</option>
+                                    <option value="other">Other Inquiries</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-neutral-400 tracking-wider mb-2 block">MESSAGE</label>
+                                <textarea rows="4" required class="w-full bg-neutral-800 border-b border-neutral-700 text-white p-3 rounded-md focus:outline-none focus:border-yellow-400 transition-colors resize-none" placeholder="Tell me about your vision..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-yellow-400 text-black font-black py-4 rounded-md tracking-wider text-sm transition-all duration-300 hover:bg-white glow-gold">
+                                SEND MESSAGE <i class="fa-solid fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="border-t border-neutral-800 mt-24 pt-12 flex flex-col md:flex-row justify-between items-center text-neutral-500 text-xs">
+                    <div>© 2026 ASAD KHAN. ALL RIGHTS RESERVED.</div>
+                    <div class="mt-4 md:mt-0 flex space-x-6">
+                        <a href="#" class="hover:text-yellow-400 transition-colors">PRIVACY POLICY</a>
+                        <a href="#" class="hover:text-yellow-400 transition-colors">TERMS & CONDITIONS</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS Scripts for 3D and Animations -->
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        const cursorGlow = document.getElementById('cursor-glow');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        document.querySelectorAll('a, button, input, textarea, select, .tilt-card').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+                cursor.style.background = '#ffffff';
+                cursorGlow.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursorGlow.style.borderColor = '#ffffff';
+            });
+            item.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.background = '#FFD700';
+                cursorGlow.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorGlow.style.borderColor = '#FFD700';
+            });
+        });
+
+        // ------------------ PRELOADER ANIMATION ------------------
+        window.addEventListener('load', () => {
+            const tlLoader = gsap.timeline();
+
+            tlLoader.to('#loader-bar', {
+                width: '100%',
+                duration: 1.5,
+                ease: 'power2.inOut'
+            })
+            .to('#loader-welcome', {
+                opacity: 0,
+                y: -50,
+                duration: 0.5,
+                display: 'none',
+                ease: 'power2.in'
+            })
+            .set('#loader-name', {
+                display: 'block',
+                opacity: 0,
+                y: 50
+            })
+            .to('#loader-name', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'back.out(1.5)'
+            })
+            .to('#loader-name', {
+                scale: 1.1,
+                duration: 1,
+                ease: 'power1.inOut'
+            })
+            .to('#loader', {
+                y: '-100%',
+                duration: 1,
+                ease: 'power4.inOut'
+            }, '+=0.5')
+            .from('#home .text-reveal', {
+                y: 100,
+                opacity: 0,
+                stagger: 0.2,
+                duration: 1,
+                ease: 'power4.out'
+            }, '-=0.3')
+            .from('#home h3, #home .flex-col, #home .absolute.bottom-10', {
+                opacity: 0,
+                y: 30,
+                duration: 1,
+                ease: 'power3.out'
+            }, '-=0.5');
+
+            // Initialize Three.js Background after load
+            initThreeJS();
+        });
+
+        // ------------------ SERVICES 3D SPINNER ------------------
+        const spinnerCarousel = document.getElementById('spinner-carousel');
+        const items = document.querySelectorAll('.spinner-item');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        const itemCount = items.length;
+        const theta = 360 / itemCount;
+        const tz = 450; // Distance from center
+        let currentRotate = 0;
+
+        // Set initial 3D positions
+        function setupCarousel() {
+            items.forEach((item, index) => {
+                const angle = theta * index;
+                item.style.transform = `rotateY(${angle}deg) translateZ(${tz}px)`;
+            });
+        }
+
+        function rotateTo(index) {
+            currentRotate = index * -theta;
+            spinnerCarousel.style.transform = `rotateY(${currentRotate}deg)`;
+        }
+
+        setupCarousel();
+
+        let currentIndex = 0;
+        
+        prevBtn.addEventListener('click', () => {
+            currentIndex--;
+            rotateTo(currentIndex);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex++;
+            rotateTo(currentIndex);
+        });
+
+        // Dragging support for mobile and mouse
+        let isDragging = false;
+        let startX;
+        let startAngle;
+
+        spinnerCarousel.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX;
+            startAngle = currentRotate;
+            spinnerCarousel.style.transition = 'none'; // Smooth drag
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                spinnerCarousel.style.transition = 'transform 1s cubic-bezier(0.2, 0.8, 0.3, 1)';
+                // Snap to nearest item
+                currentIndex = Math.round(-currentRotate / theta);
+                rotateTo(currentIndex);
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.pageX - startX;
+            currentRotate = startAngle + deltaX * 0.2; // Sensitivity
+            spinnerCarousel.style.transform = `rotateY(${currentRotate}deg)`;
+        });
+
+        // Touch support
+        spinnerCarousel.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].pageX;
+            startAngle = currentRotate;
+            spinnerCarousel.style.transition = 'none';
+        });
+
+        window.addEventListener('touchend', () => {
+            if (isDragging) {
+                isDragging = false;
+                spinnerCarousel.style.transition = 'transform 1s cubic-bezier(0.2, 0.8, 0.3, 1)';
+                currentIndex = Math.round(-currentRotate / theta);
+                rotateTo(currentIndex);
+            }
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.touches[0].pageX - startX;
+            currentRotate = startAngle + deltaX * 0.3;
+            spinnerCarousel.style.transform = `rotateY(${currentRotate}deg)`;
+        });
+
+
+        // ------------------ THREE.JS HERO BACKGROUND ------------------
+        function initThreeJS() {
+            const container = document.getElementById('hero-canvas');
+            const scene = new THREE.Scene();
+
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Create wireframe sphere / mesh
+            const geometry = new THREE.IcosahedronGeometry(2, 2);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xFFD700,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            // Particles
+            const particlesCount = 500;
+            const positions = new Float32Array(particlesCount * 3);
+            for(let i=0; i < particlesCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 10;
+            }
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                color: 0xFFD700,
+                size: 0.02
+            });
+            const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particleSystem);
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                sphere.rotation.y += 0.002;
+                sphere.rotation.x += 0.001;
+
+                particleSystem.rotation.y -= 0.001;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Responsive scale
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Tilt card logic for portfolio grid
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 20; // Inverse for realistic tilt
+                const rotateY = (centerX - x) / 20;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>
