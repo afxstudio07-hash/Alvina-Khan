@@ -78,7 +78,12 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
-
+#team .glass,
+#team .glass:hover {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
     /* reveal animations */
     .reveal{ opacity:0; transform: translateY(18px) scale(.98); filter: blur(6px); }
     .reveal.is-in{ opacity:1; transform: translateY(0) scale(1); filter: blur(0); transition: all 900ms cubic-bezier(.2,.8,.2,1); }
@@ -173,6 +178,14 @@
   100% { transform: rotateX(14deg) rotateY(360deg); }
 }
 
+/* INQUIRY FORM — NO ANIMATION */
+#inquiry *,
+#inquiry *:before,
+#inquiry *:after {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
 /* Gradient animation for shine effect */
 @keyframes gradientShift {
   0%   { background-position: 0% 50%; }
@@ -248,45 +261,16 @@
   perspective: 1200px;
 }
 
-/* ===== CARD BASE ===== */
-.glass {
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform .25s ease, box-shadow .25s ease;
-}
 
-/* ===== GLOW ON HOVER ===== */
-.glass::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: radial-gradient(
-    400px circle at var(--x) var(--y),
-    rgba(255,215,0,.25),
-    transparent 40%
-  );
-  opacity: 0;
-  transition: opacity .25s ease;
-  pointer-events: none;
-}
 
-.glass:hover::before {
-  opacity: 1;
-}
 
-.glass:hover {
-  box-shadow:
-    0 25px 60px rgba(0,0,0,.45),
-    0 0 30px rgba(255,215,0,.35);
-}
 
 /* ===== INNER DEPTH ===== */
 .glass > * {
   transform: translateZ(30px);
 }
 
-    /* 📱 MOBILE PERFORMANCE RESCUE */
+/* 📱 MOBILE PERFORMANCE RESCUE */
 @media (max-width: 768px) {
 
   /* ❌ Floating grid animation OFF */
@@ -352,7 +336,66 @@
   .modal-backdrop {
     backdrop-filter: none !important;
   }
+/* ===== AFX ABOUT SECTION AUTO FIX (NO HTML CHANGE) ===== */
 
+@media (max-width: 768px) {
+
+  /* MAIN GRID FIX */
+  #about > div {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 25px !important;
+  }
+
+  /* PADDING FIX */
+  #about {
+    padding: 60px 15px !important;
+  }
+
+  /* TEXT FIX */
+  #about h2 {
+    font-size: 26px !important;
+  }
+
+  #about h3 {
+    font-size: 18px !important;
+  }
+
+  #about p {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* TOOLS FIX (LINE → GRID) */
+  #about div[style*="flex-wrap"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  #about span {
+    font-size: 12px !important;
+    padding: 6px 8px !important;
+    justify-content: center !important;
+  }
+
+  /* SERVICES LIST FIX */
+  #about ul {
+    columns: 2 !important;
+    font-size: 13px !important;
+    padding-left: 15px !important;
+  }
+
+  #about li {
+    margin-bottom: 6px !important;
+  }
+
+  /* SCROLL BOX HEIGHT */
+  #about div[style*="overflow-y"] {
+    max-height: 300px !important;
+  }
+
+}
 }
   </style>
 </head>
@@ -673,7 +716,7 @@
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div class="reveal" data-reveal>
             <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Services (All‑in‑One)</h2>
-            <p class="mt-3 text-[rgba(246,251,255,.78)] max-w-2xl">Har service ka clear purpose hai — so visitors ko confusion nahi hota. Choose one, or take a complete studio package.</p>
+            <p class="mt-3 text-[rgba(246,251,255,.78)] max-w-2xl"></p>
           </div>
           <div class="reveal delay-1" data-reveal>
             <a class="btn btn-ghost" href="#inquiry">Tell us your requirement →</a>
@@ -807,6 +850,182 @@
       </div>
     </section>
 
+<!-- ===== AFX PREMIUM YOUTUBE SECTION ===== -->
+<section class="afx-yt-scroll">
+
+  <h2 class="afx-title">
+    <span class="white">Our Video</span> 
+    <span class="yellow">Showcase</span>
+  </h2>
+
+  <div class="afx-yt-grid">
+
+    <!-- VIDEO 1 -->
+    <div class="afx-yt-card">
+      <div class="afx-banner-video">
+        <iframe 
+          src="https://www.youtube.com/embed/9uOnhdgxnyY?mute=1&rel=0&modestbranding=1&controls=0&loop=1&playlist=9uOnhdgxnyY"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- VIDEO 2 -->
+    <div class="afx-yt-card">
+      <div class="afx-banner-video">
+        <iframe 
+          src="https://www.youtube.com/embed/VIDEO_ID?mute=1&rel=0&modestbranding=1&controls=0&loop=1&playlist=VIDEO_ID"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- VIDEO 3 -->
+    <div class="afx-yt-card">
+      <div class="afx-banner-video">
+        <iframe 
+          src="https://www.youtube.com/embed/VIDEO_ID?mute=1&rel=0&modestbranding=1&controls=0&loop=1&playlist=VIDEO_ID"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- VIDEO 4 -->
+    <div class="afx-yt-card">
+      <div class="afx-banner-video">
+        <iframe 
+          src="https://www.youtube.com/embed/VIDEO_ID?mute=1&rel=0&modestbranding=1&controls=0&loop=1&playlist=VIDEO_ID"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+/* ===== SECTION ===== */
+.afx-yt-scroll {
+  padding: 80px 20px;
+}
+
+/* ===== HEADING ===== */
+.afx-title {
+  text-align: center;
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 40px;
+}
+
+.afx-title .white {
+  color: #ffffff;
+}
+
+.afx-title .yellow {
+  color: #f7c600;
+  text-shadow: 0 0 10px rgba(247,198,0,0.5);
+}
+
+/* GRID */
+.afx-yt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+/* CARD */
+.afx-yt-card {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.6s;
+}
+
+.afx-yt-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== BANNER VIDEO ===== */
+.afx-banner-video {
+  width: 100%;
+  max-width: 1600px;
+  height: 216px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* VIDEO CROP */
+.afx-banner-video iframe {
+  width: 100%;
+  height: 400px;
+  margin-top: -90px;
+  border: none;
+  transition: 0.3s;
+}
+
+/* HOVER */
+.afx-yt-card:hover iframe {
+  transform: scale(1.03);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .afx-yt-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .afx-title {
+    font-size: 26px;
+  }
+
+  .afx-banner-video {
+    height: 180px;
+  }
+
+  .afx-banner-video iframe {
+    height: 300px;
+    margin-top: -60px;
+  }
+}
+</style>
+
+<script>
+/* ===== SCROLL ANIMATION ===== */
+const cards = document.querySelectorAll('.afx-yt-card');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+    }
+  });
+}, { threshold: 0.2 });
+
+cards.forEach(card => observer.observe(card));
+
+/* ===== AUTOPLAY ON VIEW ===== */
+const videos = document.querySelectorAll('.afx-banner-video iframe');
+
+const videoObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      let src = entry.target.src;
+
+      if (!src.includes("autoplay")) {
+        entry.target.src = src + "&autoplay=1&mute=1";
+      }
+    }
+  });
+}, { threshold: 0.5 });
+
+videos.forEach(video => videoObserver.observe(video));
+</script>
+    
     <!-- ===== 3D WORK SHOWCASE SECTION ===== -->
 <style>
 #work-showcase{
@@ -894,11 +1113,33 @@
   .project-card img{flex-grow:1;height:auto}
   .nav-btn{width:42px;height:42px;font-size:22px}
 }
+/* 🔥 MOBILE PERFORMANCE MODE */
+@media (max-width: 768px) {
+
+  /* 1. Heavy visual effects OFF */
+  * {
+    backdrop-filter: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 2. Infinite / heavy animations OFF */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* 3. Parallax OFF */
+  [style*="background-attachment: fixed"] {
+    background-attachment: scroll !important;
+  }
+
+}
 </style>
 
 <section id="work-showcase">
-  <h2>SELECTED <span>WORKS</span></h2>
-  <p>Add your own 3D, coding, UI, branding projects here.</p>
+  <h2>Our <span>Works</span></h2>
+  <p>Our work reflects creativity, quality, and attention to detail. We design visually appealing and meaningful content that helps brands stand out and connect with their audience effectively.</p>
 
   <div class="showcase-container">
     <div id="carousel" class="carousel-3d"></div>
@@ -1294,13 +1535,13 @@ allow="autoplay; encrypted-media"></iframe>
 <div class="vs-card"><div class="vs-wrap"><div class="vs-video">
 <iframe src="https://www.youtube-nocookie.com/embed/UR1olKZ2SZA?autoplay=1&mute=1&loop=1&playlist=UR1olKZ2SZA&controls=0&playsinline=1&rel=0"
 allow="autoplay; encrypted-media"></iframe>
-</div><div class="vs-info"><span class="vs-cat">Cinematic</span><h3 class="vs-title">Motion Reel</h3><p class="vs-desc">Visual Story</p></div></div></div>
+</div><div class="vs-info"><span class="vs-cat">Cinematic</span><h3 class="vs-title">Motion Reel</h3><p class="vs-desc">Logo Animation</p></div></div></div>
 
 <!-- V3 -->
 <div class="vs-card"><div class="vs-wrap"><div class="vs-video">
 <iframe src="https://www.youtube-nocookie.com/embed/mjvq7vAeNFE?autoplay=1&mute=1&loop=1&playlist=mjvq7vAeNFE&controls=0&playsinline=1&rel=0"
 allow="autoplay; encrypted-media"></iframe>
-</div><div class="vs-info"><span class="vs-cat">VFX</span><h3 class="vs-title">Visual Effects</h3><p class="vs-desc">High Impact</p></div></div></div>
+</div><div class="vs-info"><span class="vs-cat">VFX</span><h3 class="vs-title">Logo Animation</h3><p class="vs-desc">High Impact</p></div></div></div>
 
 <!-- V4 -->
 <div class="vs-card"><div class="vs-wrap"><div class="vs-video">
@@ -1314,12 +1555,12 @@ allow="autoplay; encrypted-media"></iframe>
 </div>
 </section>
     
-    <!-- Team / Founders Section -->
+  <!-- Team / Founders Section -->
 <section id="team" class="py-16 md:py-24 relative">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
     <!-- Header -->
-    <div class="text-center mb-16 reveal" data-reveal>
+    <div class="text-center mb-16">
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4">
         Meet the <span class="gradient-text">Visionaries</span>
       </h1>
@@ -1330,13 +1571,14 @@ allow="autoplay; encrypted-media"></iframe>
 
     <!-- Founder Cards -->
     <div class="grid md:grid-cols-2 gap-6 mb-12">
+
       <!-- Asad Khan -->
-      <div class="glass rounded-3xl p-6 ring-anim reveal tilt" data-reveal data-tilt>
-        <div class="tilt-pop">
+      <div class="glass rounded-3xl p-6">
+        <div>
           <div class="flex items-start gap-4 mb-6">
-            <div class="avatar-glow relative">
+            <div class="relative">
               <div class="h-16 w-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-yellow-500 grid place-items-center font-black text-2xl text-black">AK</div>
-              <div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-4 h-4 border-2 border-[#0a0a0f] pulse-dot"></div>
+              <div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-4 h-4 border-2 border-[#0a0a0f]"></div>
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
@@ -1353,7 +1595,6 @@ allow="autoplay; encrypted-media"></iframe>
             From the basics of editing to full creative solutions, Asad has built Afx into Hyderabad’s leading all-in-one creative studio.
           </p>
 
-          <!-- Skills -->
           <div class="flex flex-wrap gap-2 mb-4 text-xs">
             <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Brand Strategy</span>
             <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Art Direction</span>
@@ -1362,20 +1603,18 @@ allow="autoplay; encrypted-media"></iframe>
             <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Motion Graphics</span>
           </div>
 
-          <!-- Software -->
           <div class="mb-6">
             <div class="text-xs text-[rgba(246,251,255,.6)] mb-2">Software Expertise</div>
             <div class="flex flex-wrap gap-2">
-              <span class="software-badge"><span class="software-icon">🎨</span> Illustrator</span>
-              <span class="software-badge"><span class="software-icon">🎬</span> Premiere Pro</span>
-              <span class="software-badge"><span class="software-icon">✨</span> After Effects</span>
-              <span class="software-badge"><span class="software-icon">🧊</span> Blender</span>
-              <span class="software-badge"><span class="software-icon">🎭</span> Photoshop</span>
-              <span class="software-badge"><span class="software-icon">📐</span> InDesign</span>
+              <span class="software-badge">🎨 Illustrator</span>
+              <span class="software-badge">🎬 Premiere Pro</span>
+              <span class="software-badge">✨ After Effects</span>
+              <span class="software-badge">🧊 Blender</span>
+              <span class="software-badge">🎭 Photoshop</span>
+              <span class="software-badge">📐 InDesign</span>
             </div>
           </div>
 
-          <!-- Stats -->
           <div class="grid grid-cols-3 gap-3 mb-6">
             <div class="glass rounded-xl p-3 text-center">
               <div class="text-xl font-black text-[var(--accent)]">500+</div>
@@ -1386,24 +1625,25 @@ allow="autoplay; encrypted-media"></iframe>
               <div class="text-[10px] text-[rgba(246,251,255,.6)]">Years Exp</div>
             </div>
             <div class="glass rounded-xl p-3 text-center">
-              <div class="text-xl font-black text-[var(--accent)]">50+</div>
+              <div class="text-xl font-black text-[var(--accent)]">50%</div>
               <div class="text-[10px] text-[rgba(246,251,255,.6)]">Brands</div>
             </div>
           </div>
 
           <div class="flex gap-2">
             <a class="btn btn-primary flex-1 justify-center" href="#inquiry">Hire Asad</a>
+            <a class="btn btn-primary flex-1 justify-center" href="asadportfolio.html">View Portfolio</a>
           </div>
         </div>
       </div>
 
       <!-- Alvina Khan -->
-      <div class="glass rounded-3xl p-6 ring-anim reveal tilt delay-1" data-reveal data-tilt>
-        <div class="tilt-pop">
+      <div class="glass rounded-3xl p-6">
+        <div>
           <div class="flex items-start gap-4 mb-6">
-            <div class="avatar-glow relative">
+            <div class="relative">
               <div class="h-16 w-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 grid place-items-center font-black text-2xl text-white">AK</div>
-              <div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-4 h-4 border-2 border-[#0a0a0f] pulse-dot"></div>
+              <div class="absolute -bottom-1 -right-1 bg-green-500 rounded-full w-4 h-4 border-2 border-[#0a0a0f]"></div>
             </div>
             <div class="flex-1">
               <div class="flex items-center gap-2 mb-1">
@@ -1426,30 +1666,27 @@ allow="autoplay; encrypted-media"></iframe>
             <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Editing</span>
             <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Branding</span>
             <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Web Designing</span>
-            
           </div>
 
-          <!-- Software -->
           <div class="mb-6">
             <div class="text-xs text-[rgba(246,251,255,.6)] mb-2">Software Expertise</div>
             <div class="flex flex-wrap gap-2">
-              <span class="software-badge"><span class="software-icon">🧊</span> Blender</span>
-              <span class="software-badge"><span class="software-icon">✨</span> After Effects</span>
-              <span class="software-badge"><span class="software-icon">🎬</span> Premiere Pro</span>
-              <span class="software-badge"><span class="software-icon">🎨</span> Illustrator</span>
-              <span class="software-badge"><span class="software-icon">🎭</span> Photoshop</span>
-              <span class="software-badge"><span class="software-icon">📐</span> InDesign</span>
+              <span class="software-badge">🧊 Blender</span>
+              <span class="software-badge">✨ After Effects</span>
+              <span class="software-badge">🎬 Premiere Pro</span>
+              <span class="software-badge">🎨 Illustrator</span>
+              <span class="software-badge">🎭 Photoshop</span>
+              <span class="software-badge">📐 InDesign</span>
             </div>
           </div>
 
-          <!-- Stats -->
           <div class="grid grid-cols-3 gap-3 mb-6">
             <div class="glass rounded-xl p-3 text-center">
               <div class="text-xl font-black text-purple-400">300+</div>
               <div class="text-[10px] text-[rgba(246,251,255,.6)]">Animations</div>
             </div>
             <div class="glass rounded-xl p-3 text-center">
-              <div class="text-xl font-black text-purple-400">5+</div>
+              <div class="text-xl font-black text-purple-400">4+</div>
               <div class="text-[10px] text-[rgba(246,251,255,.6)]">Years Exp</div>
             </div>
             <div class="glass rounded-xl p-3 text-center">
@@ -1460,51 +1697,55 @@ allow="autoplay; encrypted-media"></iframe>
 
           <div class="flex gap-2">
             <a class="btn btn-primary flex-1 justify-center" href="#inquiry">Hire Alvina</a>
+            <a class="btn btn-primary flex-1 justify-center" href="alvinaportfolio.html">View Portfolio</a>
           </div>
         </div>
       </div>
+
     </div>
-
-
-    
   </div>
 </section>
-<!-- Inquiry Form -->
+<!-- Inquiry Section -->
 <section id="inquiry" class="mt-16 md:mt-24">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="reveal" data-reveal>
+
+    <div>
       <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Project Inquiry</h2>
-      <p class="mt-3 text-[rgba(246,251,255,.78)] max-w-2xl">Fill this form — we’ll reply with timeline + pricing range. (Demo form: it shows a success message on submit.)</p>
+      <p class="mt-3 text-[rgba(246,251,255,.78)] max-w-2xl">
+        Fill this form — we’ll reply with timeline + pricing range.
+      </p>
     </div>
 
     <div class="mt-8 grid lg:grid-cols-12 gap-6">
-      <!-- Inquiry Form -->
-      <div class="lg:col-span-7 glass rounded-3xl p-6 md:p-7 ring-anim reveal" data-reveal>
-        <form id="inquiryForm" class="grid sm:grid-cols-2 gap-4" novalidate>
-          <div class="sm:col-span-1">
-            <label class="text-sm font-semibold" for="name">Full Name</label>
-            <input class="mt-2 w-full field" id="name" name="name" autocomplete="name" placeholder="Your name" required />
-            <div class="help mt-1">Required</div>
+
+      <!-- LEFT: FORM -->
+      <div class="lg:col-span-7 glass rounded-3xl p-6 md:p-7">
+        <form id="inquiryForm" class="grid sm:grid-cols-2 gap-4">
+
+          <div>
+            <label class="text-sm font-semibold">Full Name</label>
+            <input id="name" class="mt-2 w-full field" placeholder="Your name" required />
           </div>
-          <div class="sm:col-span-1">
-            <label class="text-sm font-semibold" for="brand">Brand/Business</label>
-            <input class="mt-2 w-full field" id="brand" name="brand" autocomplete="organization" placeholder="Business name" />
-            <div class="help mt-1">Optional</div>
+
+          <div>
+            <label class="text-sm font-semibold">Brand/Business</label>
+            <input id="brand" class="mt-2 w-full field" placeholder="Business name" />
           </div>
-          <div class="sm:col-span-1">
-            <label class="text-sm font-semibold" for="email">Email</label>
-            <input class="mt-2 w-full field" id="email" name="email" type="email" autocomplete="email" placeholder="name@email.com" required />
-            <div class="help mt-1">Required</div>
+
+          <div>
+            <label class="text-sm font-semibold">Email</label>
+            <input id="email" type="email" class="mt-2 w-full field" placeholder="name@email.com" required />
           </div>
-          <div class="sm:col-span-1">
-            <label class="text-sm font-semibold" for="phone">Phone/WhatsApp</label>
-            <input class="mt-2 w-full field" id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="+91…" required />
-            <div class="help mt-1">Required</div>
+
+          <div>
+            <label class="text-sm font-semibold">Phone/WhatsApp</label>
+            <input id="phone" class="mt-2 w-full field" placeholder="+91…" required />
           </div>
+
           <div class="sm:col-span-2">
-            <label class="text-sm font-semibold" for="service">Service Needed</label>
-            <select class="mt-2 w-full field" id="service" name="service" required>
-              <option value="" selected disabled>Select a service</option>
+            <label class="text-sm font-semibold">Service Needed</label>
+            <select id="service" class="mt-2 w-full field" required>
+              <option value="" disabled selected>Select a service</option>
               <option>Brand Identity</option>
               <option>Graphic Design (Poster/Thumbnail/Print)</option>
               <option>Social Media Kit</option>
@@ -1513,89 +1754,147 @@ allow="autoplay; encrypted-media"></iframe>
               <option>3D Visuals</option>
               <option>Complete Studio Package</option>
             </select>
-            <div class="help mt-1">Required</div>
-          </div>
-          <div class="sm:col-span-2">
-            <label class="text-sm font-semibold" for="message">Project Details</label>
-            <textarea class="mt-2 w-full field min-h-[120px]" id="message" name="message" placeholder="Tell us what you want, deadline, references, number of designs…" required></textarea>
-            <div class="help mt-1">Add timeline + references for faster quote</div>
           </div>
 
-          <div class="sm:col-span-2 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-            <div class="text-xs text-[rgba(246,251,255,.72)]">By submitting you agree to be contacted by AFX Studio.</div>
-            <div class="flex gap-2">
-              <button type="button" id="prefillBtn" class="btn btn-ghost">Auto‑Fill Demo</button>
-              <button class="btn btn-primary" type="submit" id="sendInquiryBtn">Send Inquiry</button>
-            </div>
+          <div class="sm:col-span-2">
+            <label class="text-sm font-semibold">Project Details</label>
+            <textarea id="message" class="mt-2 w-full field min-h-[120px]"
+              placeholder="Tell us what you want, deadline, references..." required></textarea>
           </div>
+
+          <div class="sm:col-span-2 flex justify-between items-center">
+            <!-- ✅ ID ADDED -->
+            <button type="button" id="prefillBtn" class="btn btn-ghost">Auto-Fill Demo</button>
+            <button type="submit" class="btn btn-primary">Send Inquiry</button>
+          </div>
+
         </form>
       </div>
 
-      <!-- Clear Quote + Timeline Section -->
+      <!-- RIGHT SIDE -->
       <div class="lg:col-span-5 space-y-4">
-        <div class="glass rounded-3xl p-6 reveal" data-reveal>
+
+        <div class="glass rounded-3xl p-6">
           <div class="text-xs text-[rgba(246,251,255,.72)]">What you’ll get</div>
           <div class="mt-1 text-2xl font-extrabold">Clear Quote + Timeline</div>
+
           <ul class="mt-4 space-y-2 text-sm text-[rgba(246,251,255,.78)]">
-            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Estimated cost range (basic → premium)</li>
-            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Delivery timeline & revision plan</li>
-            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Deliverables list (formats + sizes)</li>
-            <li class="flex gap-2"><span class="text-[var(--accent)] font-black">•</span> Optional add‑ons (motion/3D/web)</li>
+            <li class="flex gap-2"><span class="text-yellow-400 font-black">•</span> Estimated cost range</li>
+            <li class="flex gap-2"><span class="text-yellow-400 font-black">•</span> Delivery timeline</li>
+            <li class="flex gap-2"><span class="text-yellow-400 font-black">•</span> Deliverables list</li>
+            <li class="flex gap-2"><span class="text-yellow-400 font-black">•</span> Add-ons (motion/3D/web)</li>
           </ul>
         </div>
 
-        <!-- Fast Contact Section -->
-        <div class="glass rounded-3xl p-6 ring-anim tilt reveal delay-1" data-reveal data-tilt>
-          <div class="tilt-pop">
-            <div class="text-xs text-[rgba(246,251,255,.72)]">Fast contact</div>
-            <div class="mt-1 text-2xl font-extrabold">WhatsApp / Call</div>
-            <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">Agar urgent hai, quick message bhi kar sakte ho.</p>
-            <div class="mt-4 flex flex-col sm:flex-row gap-2">
-              <a class="btn btn-primary inline-flex justify-center" href="#contact">Open Contact</a>
-              <a class="btn btn-ghost inline-flex justify-center" href="#work">View Portfolio</a>
-            </div>
+        <div class="glass rounded-3xl p-6 border border-yellow-400/40">
+          <div class="text-xs text-[rgba(246,251,255,.72)]">Fast contact</div>
+          <div class="mt-1 text-2xl font-extrabold">WhatsApp / Call</div>
+
+          <p class="mt-3 text-sm text-[rgba(246,251,255,.78)]">
+            Agar urgent hai, quick message bhi kar sakte ho.
+          </p>
+
+          <div class="mt-4 flex gap-2">
+            <a class="btn btn-primary" href="#contact">Open Contact</a>
+            <a class="btn btn-ghost" href="#work">View Portfolio</a>
           </div>
         </div>
 
-        <!-- Note Section -->
-        <div class="glass rounded-3xl p-6 reveal delay-2" data-reveal>
+        <div class="glass rounded-3xl p-6">
           <div class="text-xs text-[rgba(246,251,255,.72)]">Note</div>
           <div class="mt-1 font-bold">Welcome to a Place Where Quality Meets Trust</div>
-          <div class="mt-2 text-sm text-[rgba(246,251,255,.78)]">We don’t just offer services — we deliver experiences.
-Our goal is simple: to provide you with reliable, high-quality solutions that truly make a difference..</div>
+
+          <div class="mt-2 text-sm text-[rgba(246,251,255,.78)]">
+            We don’t just offer services — we deliver experiences.
+            Our goal is to provide reliable, high-quality solutions.
+          </div>
         </div>
+
       </div>
+
     </div>
   </div>
 </section>
 
+<!-- SUCCESS POPUP -->
+<div id="successPopup" style="
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#111827;
+padding:25px;
+border-radius:20px;
+display:none;
+text-align:center;
+z-index:9999;
+border:1px solid rgba(255,255,255,0.2);
+">
+  <h3 style="color:#FFD54F;">✅ Inquiry Sent!</h3>
+  <p>We’ll contact you shortly on WhatsApp.</p>
+  <button onclick="closePopup()" style="
+  margin-top:10px;
+  background:#FFD54F;
+  padding:8px 15px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  ">OK</button>
+</div>
+
 <script>
-  document.getElementById('sendInquiryBtn').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent form submission to server
+// FORM SUBMIT
+document.getElementById('inquiryForm').addEventListener('submit', function(e) {
+  e.preventDefault();
 
-    // Collect form data
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const service = document.getElementById('service').value;
-    const message = document.getElementById('message').value;
+  const name = document.getElementById('name').value.trim();
+  const brand = document.getElementById('brand').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const service = document.getElementById('service').value;
+  const message = document.getElementById('message').value.trim();
 
-    // Create pre-filled WhatsApp message
-    const whatsappMessage = `
-      *Project Inquiry*%0A%0A
-      *Name:* ${name}%0A
-      *Email:* ${email}%0A
-      *Phone:* ${phone}%0A
-      *Service:* ${service}%0A
-      *Message:* ${message}
-    `;
+  if(!name || !email || !phone || !service || !message){
+    alert("Please fill all required fields");
+    return;
+  }
 
-    // WhatsApp link with pre-filled message
-    const whatsappLink = `https://wa.me/+919381073943?text=${encodeURIComponent(whatsappMessage)}`;
+  const text =
+`🔥 AFX Studio Inquiry
 
-    // Open WhatsApp with the pre-filled message
-    window.open(whatsappLink, '_blank');
-  });
+Name: ${name}
+Brand: ${brand || "N/A"}
+Email: ${email}
+Phone: ${phone}
+Service: ${service}
+
+Details:
+${message}`;
+
+  const url = "https://wa.me/919381073943?text=" + encodeURIComponent(text);
+  window.open(url, '_blank');
+
+  document.getElementById('successPopup').style.display = 'block';
+
+  // ✅ RESET FORM
+  document.getElementById('inquiryForm').reset();
+});
+
+// AUTO FILL
+document.getElementById('prefillBtn').addEventListener('click', function() {
+  document.getElementById('name').value = "Rahul Sharma";
+  document.getElementById('brand').value = "RS Clothing";
+  document.getElementById('email').value = "rahul@email.com";
+  document.getElementById('phone').value = "+91 9876543210";
+  document.getElementById('service').value = "Complete Studio Package";
+  document.getElementById('message').value = 
+  "I need full branding + social media creatives. Deadline within 5 days.";
+});
+
+// CLOSE POPUP
+function closePopup(){
+  document.getElementById('successPopup').style.display = 'none';
+}
 </script>
 
     <!-- Contact -->
@@ -1802,6 +2101,7 @@ Privacy Policy | Terms & Conditions</span>
   <button id="toTop" class="fixed bottom-5 right-5 z-[65] hidden btn btn-primary" aria-label="Scroll to top">Top</button>
 
   <script>
+    
     // ----- Helpers
     const $ = (q, el=document) => el.querySelector(q);
     const $$ = (q, el=document) => [...el.querySelectorAll(q)];
@@ -1933,6 +2233,7 @@ Privacy Policy | Terms & Conditions</span>
     $$('[data-close]', modal).forEach(el => el.addEventListener('click', closeModal));
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
 
+
     // Toast
     const toast = $('#toast');
     const toastTitle = $('#toastTitle');
@@ -1992,6 +2293,8 @@ Privacy Policy | Terms & Conditions</span>
         showToast('Invalid email', 'Please enter a valid email address.');
         return;
       }
+
+
 
       // Save a tiny inquiry log
       try{
@@ -2130,8 +2433,8 @@ document.querySelectorAll('.glass').forEach(card => {
     card.style.transform =
       'rotateX(0) rotateY(0) translateZ(0)';
   });
+
 });
 </script>
 </body>
-
 </html>
