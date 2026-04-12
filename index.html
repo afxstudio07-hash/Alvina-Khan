@@ -2436,5 +2436,125 @@ document.querySelectorAll('.glass').forEach(card => {
 
 });
 </script>
+  <script>
+/* ===============================
+   🚀 AFX STUDIO FINAL OPTIMIZER
+   =============================== */
+
+(function () {
+
+  const isMobile = window.innerWidth < 768;
+  const lowDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+
+  if (isMobile || lowDevice) {
+    document.body.classList.add("afx-lite");
+  }
+
+})();
+
+/* ===============================
+   ⚡ ULTRA LITE MODE (MOBILE FIX)
+   =============================== */
+if (document.body.classList.contains("afx-lite")) {
+
+  const style = document.createElement("style");
+  style.innerHTML = `
+    
+    /* ❌ REMOVE HEAVY EFFECTS */
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* ❌ 3D CUBE FULL OFF */
+    .cube, .cube * {
+      display: none !important;
+    }
+
+    /* ❌ GRID + NOISE */
+    .grid-overlay, .noise {
+      display: none !important;
+    }
+
+    /* ❌ GLOW BORDER */
+    .ring-anim:before {
+      display: none !important;
+    }
+
+    /* ❌ GLASS BLUR FIX */
+    .glass {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(15,15,15,.9) !important;
+    }
+
+    /* ❌ CANVAS BACKGROUND */
+    #bg {
+      display: none !important;
+    }
+
+    /* ❌ HEAVY SHADOWS */
+    .btn-primary {
+      box-shadow: none !important;
+    }
+
+  `;
+  document.head.appendChild(style);
+
+  // ❌ STOP GSAP
+  if (window.gsap) {
+    try {
+      gsap.globalTimeline.clear();
+    } catch(e){}
+  }
+}
+
+/* ===============================
+   🖼️ LAZY LOAD IMAGES
+   =============================== */
+document.querySelectorAll("img").forEach(img => {
+  img.setAttribute("loading", "lazy");
+});
+
+/* ===============================
+   ⚡ SCROLL PERFORMANCE FIX
+   =============================== */
+let ticking = false;
+window.addEventListener("scroll", function () {
+  if (!ticking) {
+    window.requestAnimationFrame(function () {
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
+
+/* ===============================
+   📱 TOUCH SMOOTHNESS
+   =============================== */
+document.addEventListener("touchstart", () => {}, { passive: true });
+document.addEventListener("touchmove", () => {}, { passive: true });
+
+/* ===============================
+   🔄 FREEZE FIX (IMPORTANT)
+   =============================== */
+document.addEventListener("visibilitychange", function () {
+  if (!document.hidden) {
+    document.body.style.display = "none";
+    document.body.offsetHeight;
+    document.body.style.display = "";
+  }
+});
+
+/* ===============================
+   🔥 SAFE MARQUEE FIX
+   =============================== */
+setInterval(() => {
+  document.querySelectorAll('[class*="marquee"]').forEach(el => {
+    el.style.transform = "translateZ(0)";
+  });
+}, 2000);
+
+</script>
 </body>
 </html>
