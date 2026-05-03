@@ -555,7 +555,7 @@
               </div>
             </div>
 
-            <div class="mt-4 text-center text-xs text-[rgba(246,251,255,.60)]">Tip: cards are interactive (3D tilt + hover).</div>
+            <div class="mt-4 text-center text-xs text-[rgba(246,251,255,.60)]"></div>
           </div>
         </div>
       </div>
@@ -729,7 +729,7 @@
             <div class="tilt-pop">
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xs text-[rgba(246,251,255,.72)]">01</div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]"></div>
                   <div class="mt-1 text-xl font-extrabold">Brand Identity</div>
                 </div>
                 <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">B</div>
@@ -747,7 +747,7 @@
             <div class="tilt-pop">
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xs text-[rgba(246,251,255,.72)]">02</div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]"></div>
                   <div class="mt-1 text-xl font-extrabold">Graphic Design</div>
                 </div>
                 <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">G</div>
@@ -765,7 +765,7 @@
             <div class="tilt-pop">
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xs text-[rgba(246,251,255,.72)]">03</div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]"></div>
                   <div class="mt-1 text-xl font-extrabold">Social Media Kit</div>
                 </div>
                 <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">S</div>
@@ -783,7 +783,7 @@
             <div class="tilt-pop">
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xs text-[rgba(246,251,255,.72)]">04</div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]"></div>
                   <div class="mt-1 text-xl font-extrabold">Web Design + Dev</div>
                 </div>
                 <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">W</div>
@@ -801,7 +801,7 @@
             <div class="tilt-pop">
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xs text-[rgba(246,251,255,.72)]">05</div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]"></div>
                   <div class="mt-1 text-xl font-extrabold">Motion + Reels</div>
                 </div>
                 <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">M</div>
@@ -819,7 +819,7 @@
             <div class="tilt-pop">
               <div class="flex items-start justify-between">
                 <div>
-                  <div class="text-xs text-[rgba(246,251,255,.72)]">06</div>
+                  <div class="text-xs text-[rgba(246,251,255,.72)]"></div>
                   <div class="mt-1 text-xl font-extrabold">3D Visuals</div>
                 </div>
                 <div class="h-11 w-11 rounded-2xl bg-[rgba(247,198,0,.12)] border border-[rgba(247,198,0,.24)] grid place-items-center text-[var(--accent)] font-black">3</div>
@@ -1138,8 +1138,13 @@ videos.forEach(video => videoObserver.observe(video));
 </style>
 
 <section id="work-showcase">
-  <h2>Our <span>Works</span></h2>
-  <p>Our work reflects creativity, quality, and attention to detail. We design visually appealing and meaningful content that helps brands stand out and connect with their audience effectively.</p>
+  <h2>Our <span>Expertise</span></h2>
+  <p>We craft visually stunning and strategically designed content 
+that helps brands stand out in a competitive digital world. 
+From cinematic video editing to modern design and interactive 
+experiences, we transform ideas into powerful visuals 
+that connect, engage, and leave a lasting impression..</p>
+<br>
 
   <div class="showcase-container">
     <div id="carousel" class="carousel-3d"></div>
@@ -1220,12 +1225,12 @@ init();
   </div>
 
   <!-- TWO GALLERIES -->
-  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20">
+  <div class="max-w-7xl mx-auto px-6 flex flex-col gap-20">
 
-    <!-- GALLERY 1 -->
+    <!-- GALLERY 1 (TOP - 16:9 SLIDER) -->
     <div class="flex flex-col items-center">
-      <div class="stack-container" id="stack1"></div>
-      <div class="flex gap-4 mt-10">
+      <div class="stack-container horizontal" id="stack1"></div>
+      <div class="flex gap-4 mt-6">
         <button class="prevBtn">❮</button>
         <button class="nextBtn">❯</button>
       </div>
@@ -1234,7 +1239,7 @@ init();
     <!-- GALLERY 2 -->
     <div class="flex flex-col items-center">
       <div class="stack-container" id="stack2"></div>
-      <div class="flex gap-4 mt-10">
+      <div class="flex gap-4 mt-6">
         <button class="prevBtn">❮</button>
         <button class="nextBtn">❯</button>
       </div>
@@ -1244,21 +1249,59 @@ init();
 
   <!-- ===== CSS ===== -->
   <style>
+    #portfolio-3d{
+      padding-top:150px;
+      padding-bottom:150px;
+    }
+
     #portfolio-3d .stack-container{
       perspective:2000px;
-      width:400px;
-      height:550px;
+      width:100%;
+      max-width:500px;
+      height:600px;
       position:relative;
+      margin:auto;
     }
+
+    /* 🔥 16:9 YOUTUBE FRAME (MAIN FIX) */
+    #portfolio-3d .stack-container.horizontal{
+      position:relative;
+      width:100%;
+      max-width:1200px;        /* desktop size */
+      aspect-ratio:16/9;       /* 🔥 MAIN MAGIC */
+      overflow:hidden;
+      margin:auto;
+      border-radius:20px;
+    }
+
+    #portfolio-3d .stack-container.horizontal .card{
+      position:absolute;
+      width:100%;
+      height:100%;
+      transition:0.4s ease;
+    }
+
+    #portfolio-3d .stack-container.horizontal .card img{
+      object-fit:cover;
+    }
+
+    /* 🔥 MOBILE AUTO 16:9 */
     @media(max-width:640px){
       #portfolio-3d .stack-container{
-        width:300px;
+        max-width:300px;
         height:420px;
       }
+
+      #portfolio-3d .stack-container.horizontal{
+        max-width:100%;
+        aspect-ratio:16/9;  /* same ratio mobile */
+      }
+
       #portfolio-3d .card{
         border-width:4px;
       }
     }
+
     #portfolio-3d .card{
       position:absolute;
       inset:0;
@@ -1270,61 +1313,104 @@ init();
       box-shadow:0 30px 60px -12px rgba(0,0,0,.4);
       user-select:none;
       touch-action:none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display:flex;
+      justify-content:center;
+      align-items:center;
     }
+
     #portfolio-3d .card img{
       width:100%;
       height:100%;
       object-fit:contain;
       pointer-events:none;
     }
+
     #portfolio-3d button{
-      padding:14px 18px;
+      padding:12px 16px;
       border-radius:999px;
       border:1px solid rgba(0,0,0,.15);
       backdrop-filter:blur(8px);
       transition:.2s;
       background: transparent;
     }
-    #portfolio-3d button:hover{transform:scale(1.05);}
+
+    #portfolio-3d button:hover{
+      transform:scale(1.05);
+    }
   </style>
 
   <!-- ===== JS ===== -->
   <script>
     gsap.registerPlugin(Draggable);
 
-    /* 🔹 YAHI PAR SIRF PNG PATH CHANGE KARNA HAI */
-
     const gallery1Images = [
-      'https://ik.imagekit.io/afxstudio/SAGARHOMEO.pdf.png',
-      'https://ik.imagekit.io/afxstudio/SAGARHOMEO.pdf.png',
-      'https://ik.imagekit.io/afxstudio/Copy%20of%20Purple%20and%20Cream%20Indian%20Wedding%20Invitation.png',
-      'https://ik.imagekit.io/afxstudio/p9.png',
-      'https://ik.imagekit.io/afxstudio/p10.png',
-      'https://ik.imagekit.io/afxstudio/p2.png',
-      'https://ik.imagekit.io/afxstudio/p6.png',
-      'https://ik.imagekit.io/afxstudio/Copy%20of%20Purple%20and%20Cream%20Indian%20Wedding%20Invitation.png',
-      'https://ik.imagekit.io/afxstudio/a_Mera_number_bhi_ment.png',
-      'https://ik.imagekit.io/afxstudio/p6.png'
+      'https://i.ibb.co/1YvgSVh1/Picsart-26-05-03-22-07-57-826-jpg.jpg',
+      'https://i.ibb.co/YTbKqjwr/Picsart-26-05-03-22-12-26-821-jpg.jpg',
+      'https://i.ibb.co/vCRx1vY4/Picsart-26-05-03-22-38-43-750-jpg.jpg',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10'
     ];
 
     const gallery2Images = [
-      'https://ik.imagekit.io/afxstudio/d3.png',
-      'https://ik.imagekit.io/afxstudio/d6.png',
-      'https://ik.imagekit.io/afxstudio/d1.png',
-      'https://ik.imagekit.io/afxstudio/d7.png',
-      'https://ik.imagekit.io/afxstudio/d5.png',
-      'https://ik.imagekit.io/afxstudio/d4.png',
-      'https://ik.imagekit.io/afxstudio/d8.png',
-      'https://ik.imagekit.io/afxstudio/d2.png',
+      'https://i.ibb.co/39HBqWYx/Picsart-26-05-03-22-13-20-590-jpg.jpg',
+      'https://i.ibb.co/Kc1VxcYN/Picsart-26-05-03-22-14-56-703-jpg.jpg',
+      'https://i.ibb.co/Z11YY4D3/Picsart-26-05-03-22-14-19-374-jpg.jpg',
+      'https://i.ibb.co/QjnN1xks/Picsart-26-05-03-22-09-29-224-jpg.jpg',
+      'https://i.ibb.co/vxh5TJ8G/Picsart-26-05-03-22-13-53-766-jpg.jpg',
+      'https://i.ibb.co/JwtNqGfF/Picsart-26-05-03-22-17-04-872-jpg.jpg',
+      'https://ik.imagekit.io/afxstudio/SAGARHOMEO.pdf.png',
+      'https://i.ibb.co/Hf5V8VHq/Picsart-26-05-03-22-15-52-251-jpg.jpg',
       'https://ik.imagekit.io/afxstudio/d9.png',
-      'https://ik.imagekit.io/afxstudio/d10.png'
+      'https://i.ibb.co/1JbywFhX/Picsart-26-05-03-22-10-54-306-jpg.jpg'
     ];
 
     function createGallery(stackId, images){
       const stack = document.getElementById(stackId);
+
+      if(stack.classList.contains('horizontal')){
+        let index = 0;
+        let cards = [];
+
+        images.forEach(src=>{
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `<img src="${src}" alt="">`;
+          stack.appendChild(card);
+          cards.push(card);
+        });
+
+        function update(){
+          cards.forEach((card,i)=>{
+            card.style.opacity = (i === index) ? "1" : "0";
+            card.style.transform = `translateY(${(i - index) * 100}%)`;
+          });
+        }
+
+        const wrap = stack.parentElement;
+
+        wrap.querySelector('.nextBtn').onclick = ()=>{
+          if(index < cards.length - 1){
+            index++;
+            update();
+          }
+        };
+
+        wrap.querySelector('.prevBtn').onclick = ()=>{
+          if(index > 0){
+            index--;
+            update();
+          }
+        };
+
+        update();
+        return;
+      }
+
       let cards = [];
 
       images.forEach(src=>{
@@ -1385,7 +1471,6 @@ init();
     createGallery('stack1', gallery1Images);
     createGallery('stack2', gallery2Images);
   </script>
-
 </section>
 <!-- ========================================================= -->
 
@@ -1625,7 +1710,7 @@ allow="autoplay; encrypted-media"></iframe>
               <div class="text-[10px] text-[rgba(246,251,255,.6)]">Years Exp</div>
             </div>
             <div class="glass rounded-xl p-3 text-center">
-              <div class="text-xl font-black text-[var(--accent)]">50%</div>
+              <div class="text-xl font-black text-[var(--accent)]">50+</div>
               <div class="text-[10px] text-[rgba(246,251,255,.6)]">Brands</div>
             </div>
           </div>
@@ -2435,126 +2520,6 @@ document.querySelectorAll('.glass').forEach(card => {
   });
 
 });
-</script>
-  <script>
-/* ===============================
-   🚀 AFX STUDIO FINAL OPTIMIZER
-   =============================== */
-
-(function () {
-
-  const isMobile = window.innerWidth < 768;
-  const lowDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
-
-  if (isMobile || lowDevice) {
-    document.body.classList.add("afx-lite");
-  }
-
-})();
-
-/* ===============================
-   ⚡ ULTRA LITE MODE (MOBILE FIX)
-   =============================== */
-if (document.body.classList.contains("afx-lite")) {
-
-  const style = document.createElement("style");
-  style.innerHTML = `
-    
-    /* ❌ REMOVE HEAVY EFFECTS */
-    * {
-      animation: none !important;
-      transition: none !important;
-    }
-
-    /* ❌ 3D CUBE FULL OFF */
-    .cube, .cube * {
-      display: none !important;
-    }
-
-    /* ❌ GRID + NOISE */
-    .grid-overlay, .noise {
-      display: none !important;
-    }
-
-    /* ❌ GLOW BORDER */
-    .ring-anim:before {
-      display: none !important;
-    }
-
-    /* ❌ GLASS BLUR FIX */
-    .glass {
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      background: rgba(15,15,15,.9) !important;
-    }
-
-    /* ❌ CANVAS BACKGROUND */
-    #bg {
-      display: none !important;
-    }
-
-    /* ❌ HEAVY SHADOWS */
-    .btn-primary {
-      box-shadow: none !important;
-    }
-
-  `;
-  document.head.appendChild(style);
-
-  // ❌ STOP GSAP
-  if (window.gsap) {
-    try {
-      gsap.globalTimeline.clear();
-    } catch(e){}
-  }
-}
-
-/* ===============================
-   🖼️ LAZY LOAD IMAGES
-   =============================== */
-document.querySelectorAll("img").forEach(img => {
-  img.setAttribute("loading", "lazy");
-});
-
-/* ===============================
-   ⚡ SCROLL PERFORMANCE FIX
-   =============================== */
-let ticking = false;
-window.addEventListener("scroll", function () {
-  if (!ticking) {
-    window.requestAnimationFrame(function () {
-      ticking = false;
-    });
-    ticking = true;
-  }
-});
-
-/* ===============================
-   📱 TOUCH SMOOTHNESS
-   =============================== */
-document.addEventListener("touchstart", () => {}, { passive: true });
-document.addEventListener("touchmove", () => {}, { passive: true });
-
-/* ===============================
-   🔄 FREEZE FIX (IMPORTANT)
-   =============================== */
-document.addEventListener("visibilitychange", function () {
-  if (!document.hidden) {
-    document.body.style.display = "none";
-    document.body.offsetHeight;
-    document.body.style.display = "";
-  }
-});
-
-/* ===============================
-   🔥 SAFE MARQUEE FIX
-   =============================== */
-setInterval(() => {
-  document.querySelectorAll('[class*="marquee"]').forEach(el => {
-    el.style.transform = "translateZ(0)";
-  });
-}, 2000);
-
 </script>
 </body>
 </html>
